@@ -16,7 +16,7 @@ npx wrangler login      (só se ainda não estiver logado)
 npx wrangler deploy
 ```
 
-O terminal mostra o endereço, algo como `https://carteira-oficina.SEU-USUARIO.workers.dev`.
+O terminal mostra o endereço, algo como `https://carteiraoficina.SEU-USUARIO.workers.dev`.
 
 **Abra o endereço logo em seguida.** O primeiro acesso pede para criar o usuário administrador. Quem abrir primeiro vira o administrador, por isso faça isso assim que publicar.
 
@@ -24,7 +24,7 @@ Depois, em **Ajustes**, confira a chave Pix (aparece na fatura impressa) e cadas
 
 ## Domínio próprio (opcional)
 
-No painel da Cloudflare: Workers e Pages > carteira-oficina > Settings > Domains & Routes > Add > Custom domain (ex: `carteira.suaoficina.com.br`).
+No painel da Cloudflare: Workers e Pages > carteiraoficina > Settings > Domains & Routes > Add > Custom domain (ex: `carteira.suaoficina.com.br`).
 
 ## Como funciona
 
