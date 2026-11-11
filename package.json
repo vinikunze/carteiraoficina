@@ -1,0 +1,15 @@
+{
+  "name": "carteira-oficina",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Carteira online de clientes da oficina (Cloudflare Workers + D1)",
+  "scripts": {
+    "dev": "wrangler d1 migrations apply carteira-oficina --local && wrangler dev",
+    "deploy": "wrangler deploy",
+    "migrar": "wrangler d1 migrations apply carteira-oficina --remote",
+    "backup": "wrangler d1 export carteira-oficina --remote --output=backup.sql"
+  },
+  "devDependencies": {
+    "wrangler": "^4.160.1"
+  }
+}

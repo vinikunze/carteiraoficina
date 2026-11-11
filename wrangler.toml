@@ -1,0 +1,17 @@
+name = "carteira-oficina"
+main = "src/index.js"
+compatibility_date = "2025-10-01"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = ["/api/*"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "carteira-oficina"
+database_id = "88cbe5fa-a947-4a99-8d40-37220c9260d3"
+migrations_dir = "migrations"
+
+[observability]
+enabled = true

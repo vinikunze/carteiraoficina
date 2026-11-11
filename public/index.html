@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#14171c">
+<title>Carteira de Clientes</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314171c'/%3E%3Cpath d='M18 22h28a4 4 0 0 1 4 4v18a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4V26a4 4 0 0 1 4-4Z' fill='none' stroke='%23f5a524' stroke-width='4'/%3E%3Cpath d='M14 31h36' stroke='%23f5a524' stroke-width='4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f5f7; --card:#fff; --ink:#14171c; --ink-2:#4a5160; --ink-3:#8a91a0; --line:#e4e6eb; --line-2:#eef0f3;
+  --side:#14171c; --side-ink:#c9ced8; --accent:#f5a524; --accent-ink:#1a1206; --accent-soft:#fff4e0;
+  --blue:#2563eb; --blue-soft:#e8efff; --green:#15803d; --green-soft:#e6f6ec; --red:#c62828; --red-soft:#fdecec;
+  --amber:#b45309; --amber-soft:#fff3dc; --gray-soft:#eef0f3;
+  --radius:12px; --shadow:0 1px 2px rgba(20,23,28,.05),0 4px 16px rgba(20,23,28,.04);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+[hidden]{display:none!important}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-3)}
+.small{font-size:12.5px}
+
+/* ---------- auth ---------- */
+#auth{min-height:100%;display:grid;place-items:center;padding:24px;background:radial-gradient(1200px 600px at 20% -10%,#2a2f38 0,#14171c 60%)}
+.auth-card{width:100%;max-width:380px;background:var(--card);border-radius:16px;padding:32px 28px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.auth-card h1{font-size:20px;margin:14px 0 4px}
+.auth-card p{margin:0 0 22px;color:var(--ink-2)}
+.logo{width:44px;height:44px;border-radius:12px;background:var(--side);display:grid;place-items:center}
+.logo svg{width:24px;height:24px}
+
+/* ---------- layout ---------- */
+#app{display:grid;grid-template-columns:232px 1fr;min-height:100%}
+.sidebar{background:var(--side);color:var(--side-ink);display:flex;flex-direction:column;padding:18px 12px;position:sticky;top:0;height:100vh}
+.brand{display:flex;gap:10px;align-items:center;padding:4px 8px 20px}
+.brand .logo{width:36px;height:36px;border-radius:10px;background:#22262e}
+.brand b{display:block;color:#fff;font-size:14px;line-height:1.2}
+.brand span{font-size:12px;color:#8a91a0}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;text-decoration:none;color:var(--side-ink);font-weight:500}
+.nav a svg{width:18px;height:18px;flex:none;opacity:.8}
+.nav a:hover{background:#1f232a;color:#fff}
+.nav a.ativo{background:#262b33;color:#fff}
+.nav a.ativo svg{color:var(--accent);opacity:1}
+.nav a.cta{background:var(--accent);color:var(--accent-ink);margin-bottom:10px;justify-content:center}
+.nav a.cta svg{opacity:1}
+.nav a.cta:hover,.nav a.cta.ativo{filter:brightness(1.05);background:var(--accent);color:var(--accent-ink)}
+.nav a.cta.ativo svg{color:var(--accent-ink)}
+.side-foot{margin-top:auto;border-top:1px solid #262b33;padding:12px 8px 0;font-size:12.5px}
+.side-foot b{color:#fff;display:block;font-weight:600}
+.side-foot button{margin-top:8px;background:none;border:0;color:#8a91a0;cursor:pointer;padding:0}
+.side-foot button:hover{color:#fff}
+main{min-width:0;padding:28px 32px 60px}
+.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.topbar h2{margin:0;font-size:22px;letter-spacing:-.01em}
+.topbar .sub{color:var(--ink-3);margin-top:2px}
+.acoes{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* ---------- componentes ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-h{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line-2)}
+.card-h h3{margin:0;font-size:15px}
+.card-b{padding:18px}
+.grid{display:grid;gap:16px}
+.g-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g-main{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}
+.kpi{padding:16px 18px}
+.kpi .rot{color:var(--ink-2);font-size:12.5px;font-weight:500;display:flex;align-items:center;gap:6px}
+.kpi .val{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:6px 0 2px}
+.kpi .det{color:var(--ink-3);font-size:12.5px}
+.kpi.destaque{background:var(--side);color:#fff;border-color:var(--side)}
+.kpi.destaque .rot,.kpi.destaque .det{color:#a9b0bd}
+.kpi.destaque .val{color:var(--accent)}
+.kpi.alerta .val{color:var(--red)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:38px;padding:0 14px;border-radius:9px;border:1px solid var(--line);background:#fff;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background .15s,border-color .15s}
+.btn:hover{background:#f7f8fa;border-color:#d6d9e0}
+.btn svg{width:16px;height:16px}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.pri:hover{filter:brightness(1.04)}
+.btn.esc{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.esc:hover{background:#262b33}
+.btn.zap{background:#1fa855;border-color:#1fa855;color:#fff}
+.btn.zap:hover{background:#1b9a4d}
+.btn.perigo{color:var(--red)}
+.btn.sm{height:30px;padding:0 10px;font-size:12.5px;border-radius:7px}
+.btn.bloco{width:100%}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.icon-btn{width:30px;height:30px;padding:0;display:inline-grid;place-items:center;border-radius:7px;border:1px solid transparent;background:none;cursor:pointer;color:var(--ink-2)}
+.icon-btn:hover{background:var(--gray-soft);color:var(--ink)}
+.icon-btn svg{width:16px;height:16px}
+
+.campo{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;position:relative}
+.campo label{font-weight:600;font-size:12.5px;color:var(--ink-2)}
+.input,select.input,textarea.input{height:40px;border:1px solid var(--line);border-radius:9px;padding:0 12px;background:#fff;width:100%;outline:none;transition:border-color .15s,box-shadow .15s}
+textarea.input{height:auto;min-height:84px;padding:10px 12px;resize:vertical}
+.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,165,36,.18)}
+.input.grande{height:48px;font-size:18px;font-weight:700}
+.linha{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+.erro{background:var(--red-soft);color:var(--red);padding:10px 12px;border-radius:9px;margin-bottom:14px;font-weight:500}
+.dica{background:var(--accent-soft);color:#7a4a00;border-radius:9px;padding:10px 12px;font-size:13px;display:flex;gap:8px;align-items:flex-start}
+.dica svg{width:16px;height:16px;flex:none;margin-top:1px}
+
+.tabela-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:12px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap;background:#fafbfc}
+td{padding:11px 14px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tbody tr.clicavel{cursor:pointer}
+tbody tr.clicavel:hover td{background:#fafbfc}
+td.dir,th.dir{text-align:right}
+td.acoes-td{text-align:right;white-space:nowrap}
+.vazio{padding:36px 18px;text-align:center;color:var(--ink-3)}
+.vazio b{display:block;color:var(--ink-2);margin-bottom:4px}
+tfoot td{font-weight:700;background:#fafbfc;border-top:1px solid var(--line)}
+
+.tag{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.st-paga{background:var(--green-soft);color:var(--green)}
+.st-vencida{background:var(--red-soft);color:var(--red)}
+.st-no_prazo{background:var(--amber-soft);color:var(--amber)}
+.st-a_vencer{background:var(--blue-soft);color:var(--blue)}
+.st-em_aberto{background:var(--gray-soft);color:var(--ink-2)}
+
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:#fff;font-weight:600;font-size:12.5px;cursor:pointer;color:var(--ink-2)}
+.chip.ativo{background:var(--ink);color:#fff;border-color:var(--ink)}
+.filtros{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--line-2)}
+.filtros .input{width:auto;height:34px}
+.busca{position:relative;flex:1;min-width:180px;max-width:320px}
+.busca svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-3)}
+.busca .input{padding-left:32px;width:100%}
+
+.lista-simples{list-style:none;margin:0;padding:0}
+.lista-simples li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--line-2)}
+.lista-simples li:last-child{border-bottom:0}
+.lista-simples a{text-decoration:none}
+.lista-simples a:hover b{text-decoration:underline}
+.lista-simples .sub{color:var(--ink-3);font-size:12.5px}
+
+/* autocomplete */
+.ac-lista{position:absolute;top:100%;left:0;right:0;margin-top:4px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 32px rgba(20,23,28,.12);z-index:30;max-height:280px;overflow:auto;padding:4px}
+.ac-item{padding:9px 10px;border-radius:7px;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
+.ac-item:hover,.ac-item.foco{background:var(--gray-soft)}
+.ac-item .sub{color:var(--ink-3);font-size:12.5px}
+.ac-novo{color:var(--blue);font-weight:600}
+.cliente-escolhido{display:flex;align-items:center;justify-content:space-between;gap:10px;height:40px;border:1px solid var(--accent);background:var(--accent-soft);border-radius:9px;padding:0 6px 0 12px;font-weight:600}
+
+/* modal */
+.modal-fundo{position:fixed;inset:0;background:rgba(20,23,28,.45);display:grid;place-items:center;padding:16px;z-index:100;animation:fade .15s}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:480px;max-height:calc(100vh - 32px);overflow:auto;box-shadow:0 24px 64px rgba(0,0,0,.25);animation:sobe .18s}
+.modal-h{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line-2)}
+.modal-h h3{margin:0;font-size:16px}
+.modal-b{padding:18px}
+.modal-f{display:flex;justify-content:flex-end;gap:8px;padding:14px 18px;border-top:1px solid var(--line-2);background:#fafbfc;border-radius:0 0 14px 14px}
+@keyframes fade{from{opacity:0}}
+@keyframes sobe{from{transform:translateY(8px);opacity:0}}
+
+#toasts{position:fixed;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:200}
+.toast{background:var(--ink);color:#fff;padding:11px 14px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.25);font-weight:500;max-width:360px;animation:sobe .2s}
+.toast.erro-t{background:var(--red)}
+
+.resumo-fatura{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line-2)}
+.resumo-fatura div{padding:14px 18px;border-right:1px solid var(--line-2)}
+.resumo-fatura div:last-child{border-right:0}
+.resumo-fatura span{display:block;color:var(--ink-3);font-size:12.5px}
+.resumo-fatura b{font-size:18px}
+.carregando{padding:40px;text-align:center;color:var(--ink-3)}
+.sep{height:16px}
+.print-only{display:none}
+
+/* ---------- responsivo ---------- */
+@media (max-width:1100px){ .g-4{grid-template-columns:repeat(2,minmax(0,1fr))} .g-main{grid-template-columns:1fr} }
+@media (max-width:820px){
+  #app{grid-template-columns:1fr}
+  .sidebar{position:fixed;bottom:0;top:auto;left:0;right:0;height:auto;flex-direction:row;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:50;border-top:1px solid #262b33}
+  .brand,.side-foot{display:none}
+  .nav{flex-direction:row;flex:1;justify-content:space-around}
+  .nav a{flex-direction:column;gap:3px;font-size:10.5px;padding:6px 4px;flex:1;text-align:center}
+  .nav a.cta{margin:0;order:0}
+  .nav a .lbl-longo{display:none}
+  main{padding:18px 14px 96px}
+  .g-3,.g-2{grid-template-columns:1fr}
+  .topbar h2{font-size:19px}
+  .linha{grid-template-columns:1fr}
+  .resumo-fatura{grid-template-columns:1fr}
+  .resumo-fatura div{border-right:0;border-bottom:1px solid var(--line-2)}
+  .esconde-mobile{display:none}
+  td,th{padding:10px}
+}
+@media (max-width:480px){ .g-4{grid-template-columns:1fr 1fr} .kpi .val{font-size:19px} }
+
+@media print{
+  body{background:#fff}
+  .sidebar,.topbar .acoes,.nao-imprime,#toasts{display:none!important}
+  #app{display:block} main{padding:0}
+  .card{box-shadow:none;border:1px solid #ddd}
+  .print-only{display:block}
+}
+</style>
+</head>
+<body>
+
+<!-- ======================= LOGIN / PRIMEIRO ACESSO ======================= -->
+<div id="auth" hidden>
+  <div class="auth-card">
+    <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg></div>
+    <form id="form-login">
+      <h1>Carteira de Clientes</h1>
+      <p>Entre com seu usuário e senha.</p>
+      <div class="erro" id="login-erro" hidden></div>
+      <div class="campo"><label for="l-usuario">Usuário</label><input class="input" id="l-usuario" autocomplete="username" autocapitalize="none" required></div>
+      <div class="campo"><label for="l-senha">Senha</label><input class="input" id="l-senha" type="password" autocomplete="current-password" required></div>
+      <button class="btn pri bloco" type="submit">Entrar</button>
+    </form>
+    <form id="form-setup" hidden>
+      <h1>Primeiro acesso</h1>
+      <p>Crie o usuário administrador da carteira. Depois você cadastra o resto da equipe.</p>
+      <div class="erro" id="setup-erro" hidden></div>
+      <div class="campo"><label for="s-oficina">Nome da oficina</label><input class="input" id="s-oficina" required></div>
+      <div class="campo"><label for="s-nome">Seu nome</label><input class="input" id="s-nome" required></div>
+      <div class="campo"><label for="s-usuario">Usuário para entrar</label><input class="input" id="s-usuario" autocapitalize="none" autocomplete="username" required placeholder="ex: vinicius"></div>
+      <div class="campo"><label for="s-senha">Senha (mínimo 8 caracteres)</label><input class="input" id="s-senha" type="password" minlength="8" autocomplete="new-password" required></div>
+      <button class="btn pri bloco" type="submit">Criar e entrar</button>
+    </form>
+  </div>
+</div>
+
+<!-- ============================== APLICAÇÃO ============================== -->
+<div id="app" hidden>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg></div>
+      <div><b id="nome-oficina">Oficina</b><span>Carteira de clientes</span></div>
+    </div>
+    <nav class="nav" id="nav">
+      <a href="#/lancar" data-r="lancar" class="cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>Lançar<span class="lbl-longo"> serviço</span></span></a>
+      <a href="#/painel" data-r="painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Painel</span></a>
+      <a href="#/cobrancas" data-r="cobrancas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Cobranças</span></a>
+      <a href="#/clientes" data-r="clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/><path d="M16 4a4 4 0 0 1 0 8M22 21c0-3-1.8-5.6-4.5-6.6"/></svg><span>Clientes</span></a>
+      <a href="#/servicos" data-r="servicos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4Z"/></svg><span>Serviços</span></a>
+      <a href="#/config" data-r="config" class="so-desktop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg><span>Ajustes</span></a>
+    </nav>
+    <div class="side-foot">
+      <b id="nome-usuario"></b>
+      <span id="papel-usuario" class="muted"></span><br>
+      <button id="btn-sair" type="button">Sair da conta</button>
+    </div>
+  </aside>
+  <main>
+    <div id="view"></div>
+  </main>
+</div>
+
+<div id="modal-root"></div>
+<div id="toasts"></div>
+
+<script>
+'use strict';
+/* =============================== utilidades =============================== */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmtBRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+const brl = (c) => fmtBRL.format((c || 0) / 100);
+const MESES = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const dataBR = (d) => d ? d.split('-').reverse().join('/') : '';
+const diaMes = (d) => d ? `${d.slice(8, 10)}/${d.slice(5, 7)}` : '';
+const nomeMes = (comp) => { const [a, m] = comp.split('-'); return `${MESES[Number(m) - 1]} de ${a}`; };
+const nomeMesCurto = (comp) => { const [a, m] = comp.split('-'); const n = MESES[Number(m) - 1]; return `${n[0].toUpperCase() + n.slice(1)}/${a}`; };
+const pad = (n) => String(n).padStart(2, '0');
+function proximoMes(comp) { let [a, m] = comp.split('-').map(Number); m++; if (m > 12) { m = 1; a++; } return `${a}-${pad(m)}`; }
+function mesAnterior(comp) { let [a, m] = comp.split('-').map(Number); m--; if (m < 1) { m = 12; a--; } return `${a}-${pad(m)}`; }
+function janela(comp) {
+  const prox = proximoMes(comp);
+  const [a, m] = prox.split('-').map(Number);
+  const ult = new Date(a, m, 0).getDate();
+  return { inicio: `${prox}-${pad(Math.min(S.config.dia_inicio, ult))}`, fim: `${prox}-${pad(Math.min(S.config.dia_fim, ult))}` };
+}
+const STATUS = {
+  paga: 'Paga', vencida: 'Vencida', no_prazo: 'Vence agora', a_vencer: 'A vencer', em_aberto: 'Mês corrente',
+};
+const tagStatus = (s) => `<span class="tag st-${s}">${STATUS[s] || s}</span>`;
+const hojeISO = () => S.hoje || new Date().toISOString().slice(0, 10);
+
+const I = {
+  busca: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+  editar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+  lixo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+  zap: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4a.5.5 0 0 0 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg>',
+  print: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>',
+  dinheiro: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>',
+  mais: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>',
+  baixar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>',
+  voltar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+};
+
+/* ================================ estado e API ================================ */
+const S = { usuario: null, config: { dia_inicio: 5, dia_fim: 10, nome_oficina: '', chave_pix: '' }, hoje: null, clientes: null };
+
+async function api(caminho, { method = 'GET', body } = {}) {
+  const opts = { method, headers: {}, credentials: 'same-origin' };
+  if (body !== undefined) { opts.headers['content-type'] = 'application/json'; opts.body = JSON.stringify(body); }
+  let r;
+  try { r = await fetch('/api' + caminho, opts); } catch { throw new Error('Sem conexão com o servidor. Verifique a internet.'); }
+  let dados = {};
+  try { dados = await r.json(); } catch {}
+  if (r.status === 401 && !caminho.startsWith('/login')) { mostrarAuth(); throw new Error(dados.erro || 'Sessão expirada.'); }
+  if (!r.ok) throw new Error(dados.erro || `Erro ${r.status}`);
+  return dados;
+}
+
+function toast(msg, erro = false) {
+  const t = document.createElement('div');
+  t.className = 'toast' + (erro ? ' erro-t' : '');
+  t.textContent = msg;
+  $('#toasts').appendChild(t);
+  setTimeout(() => t.remove(), erro ? 5000 : 3000);
+}
+
+/* dinheiro: digita só números e vira R$ */
+function mascaraDinheiro(input, centavosIniciais = 0) {
+  input.dataset.centavos = String(centavosIniciais || 0);
+  input.value = centavosIniciais ? brl(centavosIniciais) : '';
+  input.setAttribute('inputmode', 'numeric');
+  input.addEventListener('input', () => {
+    const dig = input.value.replace(/\D/g, '').replace(/^0+/, '').slice(0, 11);
+    const c = Number(dig || 0);
+    input.dataset.centavos = String(c);
+    input.value = c ? brl(c) : '';
+  });
+}
+const centavosDe = (input) => Number(input.dataset.centavos || 0);
+
+/* ================================== modal ================================== */
+function abrirModal({ titulo, corpo, rodape = '', largura }) {
+  fecharModal();
+  const root = $('#modal-root');
+  root.innerHTML = `<div class="modal-fundo"><div class="modal" role="dialog" aria-modal="true" ${largura ? `style="max-width:${largura}px"` : ''}>
+    <div class="modal-h"><h3>${esc(titulo)}</h3><button class="icon-btn" data-fechar aria-label="Fechar">${I.x}</button></div>
+    <div class="modal-b">${corpo}</div>${rodape ? `<div class="modal-f">${rodape}</div>` : ''}</div></div>`;
+  const fundo = $('.modal-fundo', root);
+  fundo.addEventListener('mousedown', (e) => { if (e.target === fundo) fecharModal(); });
+  $$('[data-fechar]', root).forEach((b) => b.addEventListener('click', fecharModal));
+  setTimeout(() => { const f = $('input:not([type=hidden]),select,textarea', root); f && f.focus(); }, 30);
+  return $('.modal', root);
+}
+function fecharModal() { $('#modal-root').innerHTML = ''; }
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') fecharModal(); });
+
+function confirmar(titulo, texto, rotuloOk = 'Confirmar', perigo = true) {
+  return new Promise((res) => {
+    const m = abrirModal({
+      titulo, corpo: `<p style="margin:0">${texto}</p>`,
+      rodape: `<button class="btn" data-n>Cancelar</button><button class="btn ${perigo ? 'esc' : 'pri'}" data-s>${esc(rotuloOk)}</button>`,
+    });
+    $('[data-n]', m).onclick = () => { fecharModal(); res(false); };
+    $('[data-s]', m).onclick = () => { fecharModal(); res(true); };
+  });
+}
+
+/* ================================ autenticação ================================ */
+function mostrarAuth(setup = false) {
+  $('#app').hidden = true;
+  $('#auth').hidden = false;
+  $('#form-login').hidden = setup;
+  $('#form-setup').hidden = !setup;
+  setTimeout(() => (setup ? $('#s-oficina') : $('#l-usuario')).focus(), 50);
+}
+
+$('#form-login').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const err = $('#login-erro'); err.hidden = true;
+  const btn = $('button[type=submit]', e.target); btn.disabled = true;
+  try {
+    await api('/login', { method: 'POST', body: { usuario: $('#l-usuario').value, senha: $('#l-senha').value } });
+    $('#l-senha').value = '';
+    await iniciarApp();
+  } catch (ex) { err.textContent = ex.message; err.hidden = false; }
+  btn.disabled = false;
+});
+
+$('#form-setup').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const err = $('#setup-erro'); err.hidden = true;
+  const btn = $('button[type=submit]', e.target); btn.disabled = true;
+  try {
+    await api('/setup', { method: 'POST', body: {
+      nome_oficina: $('#s-oficina').value, nome: $('#s-nome').value, usuario: $('#s-usuario').value, senha: $('#s-senha').value,
+    } });
+    await iniciarApp();
+    location.hash = '#/config';
+    toast('Tudo pronto. Confira a chave Pix e os dias de vencimento.');
+  } catch (ex) { err.textContent = ex.message; err.hidden = false; }
+  btn.disabled = false;
+});
+
+$('#btn-sair').addEventListener('click', async () => {
+  try { await api('/logout', { method: 'POST' }); } catch {}
+  S.usuario = null; S.clientes = null;
+  mostrarAuth(false);
+});
+
+async function iniciarApp() {
+  const d = await api('/me');
+  S.usuario = d.usuario; S.config = d.config; S.hoje = d.hoje;
+  $('#nome-oficina').textContent = S.config.nome_oficina;
+  $('#nome-usuario').textContent = S.usuario.nome;
+  $('#papel-usuario').textContent = S.usuario.admin ? 'Administrador' : 'Equipe';
+  $('#auth').hidden = true;
+  $('#app').hidden = false;
+  if (!location.hash || location.hash === '#/' ) location.hash = '#/painel';
+  else render();
+}
+
+async function boot() {
+  try {
+    const st = await fetch('/api/setup').then((r) => r.json());
+    if (st.precisaSetup) return mostrarAuth(true);
+    await iniciarApp();
+  } catch {
+    mostrarAuth(false);
+  }
+}
+
+/* =================================== rotas =================================== */
+function rotaAtual() {
+  const h = location.hash.replace(/^#\/?/, '');
+  const [caminho, qs] = h.split('?');
+  return { partes: caminho.split('/').filter(Boolean), params: new URLSearchParams(qs || '') };
+}
+
+async function render() {
+  if (!S.usuario) return;
+  const { partes, params } = rotaAtual();
+  const r = partes[0] || 'painel';
+  $$('#nav a').forEach((a) => a.classList.toggle('ativo', a.dataset.r === r || (r === 'fatura' && a.dataset.r === 'cobrancas')));
+  const view = $('#view');
+  view.innerHTML = '<div class="carregando">Carregando...</div>';
+  window.scrollTo(0, 0);
+  try {
+    if (r === 'painel') await vPainel(view);
+    else if (r === 'lancar') await vLancar(view, params);
+    else if (r === 'servicos') await vServicos(view, params);
+    else if (r === 'cobrancas') await vCobrancas(view, params);
+    else if (r === 'fatura') await vFatura(view, Number(partes[1]), partes[2]);
+    else if (r === 'clientes' && partes[1]) await vCliente(view, Number(partes[1]));
+    else if (r === 'clientes') await vClientes(view, params);
+    else if (r === 'config') await vConfig(view);
+    else location.hash = '#/painel';
+  } catch (ex) {
+    view.innerHTML = `<div class="card"><div class="vazio"><b>Não foi possível carregar</b>${esc(ex.message)}</div></div>`;
+  }
+}
+window.addEventListener('hashchange', render);
+
+const topo = (titulo, sub = '', acoes = '') =>
+  `<div class="topbar"><div><h2>${titulo}</h2>${sub ? `<div class="sub">${sub}</div>` : ''}</div><div class="acoes">${acoes}</div></div>`;
+
+/* =================================== painel =================================== */
+async function vPainel(view) {
+  const d = await api('/painel');
+  S.hoje = d.hoje; S.config = d.config;
+  const c = d.cobranca, v = d.vencidas, m = d.mes_atual;
+  const pct = c.total ? Math.round((c.recebido / c.total) * 100) : 0;
+  const hoje = d.hoje;
+  let fase = '';
+  if (hoje < c.inicio) fase = `Cobrança de ${nomeMes(c.competencia)} começa em ${dataBR(c.inicio)}`;
+  else if (hoje <= c.fim) fase = `Período de pagamento aberto até ${dataBR(c.fim)}`;
+  else fase = `Prazo de ${nomeMes(c.competencia)} encerrou em ${dataBR(c.fim)}`;
+
+  view.innerHTML = topo('Painel', `Hoje é ${dataBR(hoje)}`, `<a class="btn pri" href="#/lancar">${I.mais} Lançar serviço</a>`) + `
+  <div class="grid g-4">
+    <div class="card kpi destaque">
+      <div class="rot">A receber de ${esc(nomeMesCurto(c.competencia))}</div>
+      <div class="val num">${brl(c.saldo)}</div>
+      <div class="det">${esc(fase)}</div>
+    </div>
+    <div class="card kpi">
+      <div class="rot">Recebido dessa cobrança</div>
+      <div class="val num">${brl(c.recebido)}</div>
+      <div class="det">${pct}% de ${brl(c.total)}</div>
+    </div>
+    <div class="card kpi ${v.total ? 'alerta' : ''}">
+      <div class="rot">Vencidas</div>
+      <div class="val num">${brl(v.total)}</div>
+      <div class="det">${v.quantidade} ${v.quantidade === 1 ? 'fatura' : 'faturas'} fora do prazo</div>
+    </div>
+    <div class="card kpi">
+      <div class="rot">Acumulado em ${esc(nomeMesCurto(m.competencia))}</div>
+      <div class="val num">${brl(m.total)}</div>
+      <div class="det">Cobra de ${diaMes(m.inicio)} a ${diaMes(m.fim)}</div>
+    </div>
+  </div>
+  <div class="sep"></div>
+  <div class="grid g-main">
+    <div class="card">
+      <div class="card-h"><h3>Falta receber de ${esc(nomeMes(c.competencia))}</h3><a class="btn sm" href="#/cobrancas?competencia=${c.competencia}">Ver todas</a></div>
+      ${c.lista.length ? `<ul class="lista-simples">${c.lista.map((f) => `
+        <li><a href="#/fatura/${f.cliente_id}/${f.competencia}"><b>${esc(f.cliente_nome)}</b><div class="sub">${f.qtd} ${f.qtd === 1 ? 'serviço' : 'serviços'}${f.pago ? ` · pagou ${brl(f.pago)}` : ''}</div></a>
+        <div style="text-align:right"><b class="num">${brl(f.saldo)}</b><div>${tagStatus(f.status)}</div></div></li>`).join('')}</ul>`
+        : `<div class="vazio"><b>${c.total ? 'Tudo recebido' : 'Nada para cobrar'}</b>${c.total ? 'Todos os clientes desse mês já pagaram.' : 'Não houve serviços nesse mês.'}</div>`}
+    </div>
+    <div class="grid" style="align-content:start">
+      <div class="card">
+        <div class="card-h"><h3>Vencidas</h3>${v.quantidade ? `<a class="btn sm" href="#/cobrancas?status=vencida&competencia=">Ver todas</a>` : ''}</div>
+        ${v.lista.length ? `<ul class="lista-simples">${v.lista.map((f) => `
+          <li><a href="#/fatura/${f.cliente_id}/${f.competencia}"><b>${esc(f.cliente_nome)}</b><div class="sub">${esc(nomeMesCurto(f.competencia))} · venceu ${diaMes(f.fim)}</div></a><b class="num" style="color:var(--red)">${brl(f.saldo)}</b></li>`).join('')}</ul>`
+          : '<div class="vazio"><b>Nenhuma fatura vencida</b>Tudo em dia por aqui.</div>'}
+      </div>
+      <div class="card">
+        <div class="card-h"><h3>Últimos lançamentos</h3><a class="btn sm" href="#/servicos">Histórico</a></div>
+        ${d.ultimos_servicos.length ? `<ul class="lista-simples">${d.ultimos_servicos.map((s) => `
+          <li><div><b>${esc(s.cliente_nome)}</b><div class="sub">${diaMes(s.data_servico)} · ${esc(s.descricao)}</div></div><span class="num">${brl(s.valor_centavos)}</span></li>`).join('')}</ul>`
+          : '<div class="vazio"><b>Nenhum serviço lançado ainda</b><a href="#/lancar">Lançar o primeiro</a></div>'}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ================================ clientes (cache) ================================ */
+async function carregarClientes(forcar = false) {
+  if (!S.clientes || forcar) S.clientes = (await api('/clientes')).clientes;
+  return S.clientes;
+}
+const normal = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+/* seletor de cliente com busca e cadastro rápido */
+function seletorCliente(container, { inicialId = null, aoEscolher = () => {} } = {}) {
+  let escolhido = null;
+  let foco = -1;
+  const desenhar = () => {
+    if (escolhido) {
+      container.innerHTML = `<div class="cliente-escolhido"><span>${esc(escolhido.nome)}${escolhido.telefone ? ` <span class="muted small">${esc(escolhido.telefone)}</span>` : ''}</span><button type="button" class="icon-btn" aria-label="Trocar cliente">${I.x}</button></div>`;
+      $('button', container).onclick = () => { escolhido = null; aoEscolher(null); desenhar(); $('input', container).focus(); };
+    } else {
+      container.innerHTML = `<input class="input" placeholder="Digite o nome do cliente" autocomplete="off"><div class="ac-lista" hidden></div>`;
+      const inp = $('input', container), lista = $('.ac-lista', container);
+      const atualizar = () => {
+        const q = normal(inp.value.trim());
+        const res = (S.clientes || []).filter((c) => !q || normal(c.nome).includes(q) || normal(c.telefone).includes(q)).slice(0, 8);
+        foco = res.length ? 0 : -1;
+        lista.innerHTML = res.map((c, i) => `<div class="ac-item${i === 0 ? ' foco' : ''}" data-id="${c.id}"><span>${esc(c.nome)}</span><span class="sub">${esc(c.telefone || '')}</span></div>`).join('')
+          + (inp.value.trim() ? `<div class="ac-item ac-novo" data-novo="1">+ Cadastrar "${esc(inp.value.trim())}"</div>` : '');
+        if (!res.length && inp.value.trim()) foco = 0;
+        lista.hidden = !lista.innerHTML;
+      };
+      inp.addEventListener('input', atualizar);
+      inp.addEventListener('focus', atualizar);
+      inp.addEventListener('blur', () => setTimeout(() => (lista.hidden = true), 150));
+      inp.addEventListener('keydown', (e) => {
+        const itens = $$('.ac-item', lista);
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (!itens.length) return;
+          foco = (foco + (e.key === 'ArrowDown' ? 1 : -1) + itens.length) % itens.length;
+          itens.forEach((it, i) => it.classList.toggle('foco', i === foco));
+        } else if (e.key === 'Enter') {
+          if (!lista.hidden && itens[foco]) { e.preventDefault(); itens[foco].dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true })); }
+        }
+      });
+      lista.addEventListener('mousedown', async (e) => {
+        const it = e.target.closest('.ac-item'); if (!it) return;
+        e.preventDefault();
+        if (it.dataset.novo) {
+          const novo = await modalCliente({ nome: inp.value.trim() });
+          if (novo) { escolhido = novo; aoEscolher(novo); desenhar(); }
+        } else {
+          escolhido = S.clientes.find((c) => c.id === Number(it.dataset.id));
+          aoEscolher(escolhido); desenhar();
+        }
+      });
+    }
+  };
+  if (inicialId) escolhido = (S.clientes || []).find((c) => c.id === Number(inicialId)) || null;
+  if (escolhido) aoEscolher(escolhido);
+  desenhar();
+  return { get: () => escolhido };
+}
+
+function modalCliente(cliente = {}) {
+  return new Promise((res) => {
+    const editando = !!cliente.id;
+    const m = abrirModal({
+      titulo: editando ? 'Editar cliente' : 'Novo cliente',
+      corpo: `<form id="f-cli"><div class="erro" hidden></div>
+        <div class="campo"><label>Nome do cliente ou empresa</label><input class="input" name="nome" required value="${esc(cliente.nome)}"></div>
+        <div class="linha">
+          <div class="campo"><label>WhatsApp</label><input class="input" name="telefone" inputmode="tel" placeholder="(66) 99999-9999" value="${esc(cliente.telefone)}"></div>
+          <div class="campo"><label>CPF ou CNPJ</label><input class="input" name="documento" value="${esc(cliente.documento)}"></div>
+        </div>
+        <div class="campo"><label>Observações</label><textarea class="input" name="observacoes" rows="2">${esc(cliente.observacoes)}</textarea></div>
+        ${editando ? `<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" name="ativo" ${cliente.ativo ? 'checked' : ''}> Cliente ativo</label>` : ''}
+        <button hidden></button></form>`,
+      rodape: `<button class="btn" data-fechar>Cancelar</button><button class="btn pri" data-salvar>${editando ? 'Salvar' : 'Cadastrar cliente'}</button>`,
+    });
+    const f = $('#f-cli', m);
+    $('[name=telefone]', f).addEventListener('input', (e) => (e.target.value = mascaraTel(e.target.value)));
+    $$('[data-fechar]', m).forEach((b) => b.addEventListener('click', () => res(null)));
+    const salvar = async (e) => {
+      e && e.preventDefault();
+      const body = Object.fromEntries(new FormData(f));
+      if (editando) body.ativo = !!$('[name=ativo]', f).checked;
+      try {
+        const r = editando ? await api(`/clientes/${cliente.id}`, { method: 'PUT', body }) : await api('/clientes', { method: 'POST', body });
+        await carregarClientes(true);
+        fecharModal(); toast(editando ? 'Cliente atualizado.' : 'Cliente cadastrado.');
+        res(r.cliente);
+      } catch (ex) { const er = $('.erro', f); er.textContent = ex.message; er.hidden = false; }
+    };
+    f.addEventListener('submit', salvar);
+    $('[data-salvar]', m).addEventListener('click', salvar);
+  });
+}
+
+function mascaraTel(v) {
+  const d = v.replace(/\D/g, '').slice(0, 11);
+  if (d.length <= 2) return d;
+  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+}
+
+/* ================================ lançar serviço ================================ */
+function formServicoHTML(s = {}) {
+  return `<div class="erro" hidden></div>
+    <div class="campo"><label>Cliente</label><div data-cliente></div></div>
+    <div class="linha">
+      <div class="campo"><label>Data do serviço</label><input class="input" type="date" name="data_servico" required value="${esc(s.data_servico || hojeISO())}"></div>
+      <div class="campo"><label>Veículo / placa</label><input class="input" name="veiculo" placeholder="Ex: Hilux ABC1D23" value="${esc(s.veiculo)}"></div>
+    </div>
+    <div class="campo"><label>O que foi feito</label><textarea class="input" name="descricao" rows="3" required placeholder="Ex: Troca de óleo e filtro">${esc(s.descricao)}</textarea></div>
+    <div class="campo"><label>Valor</label><input class="input grande num" name="valor" placeholder="R$ 0,00"></div>
+    <div class="dica" data-venc>${I.info}<span></span></div>`;
+}
+
+function ligarFormServico(raiz, s = {}, clienteInicial = null) {
+  let cliente = null;
+  const sel = seletorCliente($('[data-cliente]', raiz), { inicialId: s.cliente_id || clienteInicial, aoEscolher: (c) => (cliente = c) });
+  const valor = $('[name=valor]', raiz);
+  mascaraDinheiro(valor, s.valor_centavos || 0);
+  const data = $('[name=data_servico]', raiz);
+  const venc = () => {
+    const d = data.value;
+    const sp = $('[data-venc] span', raiz);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) { sp.textContent = 'Escolha a data do serviço.'; return; }
+    const comp = d.slice(0, 7), j = janela(comp);
+    sp.innerHTML = `Entra na cobrança de <b>${esc(nomeMes(comp))}</b>. O cliente paga entre <b>${dataBR(j.inicio)}</b> e <b>${dataBR(j.fim)}</b>.`;
+  };
+  data.addEventListener('input', venc); venc();
+  return {
+    dados() {
+      const c = sel.get();
+      if (!c) throw new Error('Escolha o cliente.');
+      const v = centavosDe(valor);
+      if (!v) throw new Error('Informe o valor do serviço.');
+      return {
+        cliente_id: c.id, data_servico: data.value, veiculo: $('[name=veiculo]', raiz).value,
+        descricao: $('[name=descricao]', raiz).value, valor_centavos: v,
+      };
+    },
+    erro(msg) { const e = $('.erro', raiz); e.textContent = msg; e.hidden = !msg; },
+  };
+}
+
+async function vLancar(view, params) {
+  await carregarClientes();
+  view.innerHTML = topo('Lançar serviço', 'Cada serviço entra sozinho na cobrança do mês seguinte') + `
+  <div class="grid g-main">
+    <form class="card" id="f-serv"><div class="card-b">${formServicoHTML()}
+      <div class="sep"></div><button class="btn pri bloco" type="submit" style="height:46px">Salvar serviço</button></div></form>
+    <div class="card"><div class="card-h"><h3>Lançados agora há pouco</h3></div><div id="recentes"></div></div>
+  </div>`;
+  const f = $('#f-serv');
+  const ctl = ligarFormServico(f, {}, params.get('cliente'));
+  const carregarRecentes = async () => {
+    const { servicos } = await api('/servicos?limite=10');
+    $('#recentes').innerHTML = servicos.length ? `<ul class="lista-simples">${servicos.map((s) => `
+      <li><div><b>${esc(s.cliente_nome)}</b><div class="sub">${dataBR(s.data_servico)} · ${esc(s.descricao)}${s.veiculo ? ` · ${esc(s.veiculo)}` : ''}</div></div>
+      <div style="display:flex;align-items:center;gap:4px"><span class="num" style="font-weight:600">${brl(s.valor_centavos)}</span>
+      <button class="icon-btn" data-ed="${s.id}" title="Editar">${I.editar}</button></div></li>`).join('')}</ul>`
+      : '<div class="vazio"><b>Nada lançado ainda</b>Os serviços salvos aparecem aqui.</div>';
+    $$('[data-ed]', $('#recentes')).forEach((b) => b.onclick = () => modalServico(servicos.find((s) => s.id === Number(b.dataset.ed)), carregarRecentes));
+  };
+  carregarRecentes();
+  f.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = $('button[type=submit]', f);
+    try {
+      ctl.erro('');
+      const body = ctl.dados();
+      btn.disabled = true;
+      const r = await api('/servicos', { method: 'POST', body });
+      toast(`Serviço salvo. Vence entre ${diaMes(r.vencimento.inicio)} e ${diaMes(r.vencimento.fim)}.`);
+      const dataAtual = $('[name=data_servico]', f).value;
+      view.innerHTML = '';
+      await vLancar(view, new URLSearchParams());
+      $('[name=data_servico]', view).value = dataAtual;
+      $('[name=data_servico]', view).dispatchEvent(new Event('input'));
+      const inp = $('[data-cliente] input', view); inp && inp.focus();
+    } catch (ex) { ctl.erro(ex.message); btn.disabled = false; }
+  });
+}
+
+async function modalServico(s, aoSalvar) {
+  await carregarClientes();
+  const m = abrirModal({
+    titulo: 'Editar serviço', largura: 540,
+    corpo: `<form id="f-ed">${formServicoHTML(s)}<button hidden></button></form>`,
+    rodape: `<button class="btn perigo" data-del style="margin-right:auto">${I.lixo} Excluir</button><button class="btn" data-fechar>Cancelar</button><button class="btn pri" data-salvar>Salvar</button>`,
+  });
+  const f = $('#f-ed', m);
+  const ctl = ligarFormServico(f, s);
+  const salvar = async (e) => {
+    e && e.preventDefault();
+    try { await api(`/servicos/${s.id}`, { method: 'PUT', body: ctl.dados() }); fecharModal(); toast('Serviço atualizado.'); aoSalvar && aoSalvar(); }
+    catch (ex) { ctl.erro(ex.message); }
+  };
+  f.addEventListener('submit', salvar);
+  $('[data-salvar]', m).onclick = salvar;
+  $('[data-del]', m).onclick = async () => {
+    if (!(await confirmar('Excluir serviço', `Excluir "${esc(s.descricao)}" de ${brl(s.valor_centavos)}? Isso tira o valor da cobrança do cliente.`, 'Excluir'))) return;
+    try { await api(`/servicos/${s.id}`, { method: 'DELETE' }); toast('Serviço excluído.'); aoSalvar && aoSalvar(); }
+    catch (ex) { toast(ex.message, true); }
+  };
+}
+
+/* ================================== serviços ================================== */
+async function vServicos(view, params) {
+  const comp = params.has('competencia') ? params.get('competencia') : hojeISO().slice(0, 7);
+  const q = params.get('q') || '';
+  const qs = new URLSearchParams(); if (comp) qs.set('competencia', comp); if (q) qs.set('q', q);
+  const { servicos, total } = await api('/servicos?' + qs);
+  view.innerHTML = topo('Serviços', comp ? `Feitos em ${esc(nomeMes(comp))}` : 'Todos os meses', `<a class="btn pri" href="#/lancar">${I.mais} Lançar serviço</a>`) + `
+  <div class="card">
+    <div class="filtros">
+      <input type="month" class="input" id="f-comp" value="${esc(comp)}">
+      <div class="busca">${I.busca}<input class="input" id="f-q" placeholder="Cliente, serviço ou placa" value="${esc(q)}"></div>
+      <span class="muted" style="margin-left:auto">${servicos.length} ${servicos.length === 1 ? 'serviço' : 'serviços'} · <b class="num" style="color:var(--ink)">${brl(total)}</b></span>
+    </div>
+    <div class="tabela-wrap">${servicos.length ? `<table>
+      <thead><tr><th>Data</th><th>Cliente</th><th>Serviço</th><th class="esconde-mobile">Veículo</th><th class="dir">Valor</th><th></th></tr></thead>
+      <tbody>${servicos.map((s) => `<tr>
+        <td class="num">${dataBR(s.data_servico)}</td>
+        <td><a href="#/clientes/${s.cliente_id}"><b>${esc(s.cliente_nome)}</b></a></td>
+        <td>${esc(s.descricao)}</td>
+        <td class="esconde-mobile muted">${esc(s.veiculo || '')}</td>
+        <td class="dir num"><b>${brl(s.valor_centavos)}</b></td>
+        <td class="acoes-td"><button class="icon-btn" data-ed="${s.id}" title="Editar">${I.editar}</button></td></tr>`).join('')}</tbody>
+    </table>` : '<div class="vazio"><b>Nenhum serviço encontrado</b>Mude o mês ou a busca.</div>'}</div>
+  </div>`;
+  const ir = () => {
+    const p = new URLSearchParams();
+    p.set('competencia', $('#f-comp').value);
+    if ($('#f-q').value.trim()) p.set('q', $('#f-q').value.trim());
+    location.hash = '#/servicos?' + p;
+  };
+  $('#f-comp').addEventListener('change', ir);
+  let t; $('#f-q').addEventListener('input', () => { clearTimeout(t); t = setTimeout(ir, 450); });
+  $$('[data-ed]').forEach((b) => b.onclick = () => modalServico(servicos.find((s) => s.id === Number(b.dataset.ed)), render));
+  if (q) { const i = $('#f-q'); i.focus(); i.setSelectionRange(q.length, q.length); }
+}
+
+/* ================================== cobranças ================================== */
+async function vCobrancas(view, params) {
+  const padrao = mesAnterior(hojeISO().slice(0, 7));
+  const comp = params.has('competencia') ? params.get('competencia') : padrao;
+  const status = params.get('status') || '';
+  const qs = new URLSearchParams(); if (comp) qs.set('competencia', comp); if (status) qs.set('status', status);
+  const { faturas, resumo } = await api('/faturas?' + qs);
+  const j = comp ? janela(comp) : null;
+  const sub = comp ? `Serviços de ${esc(nomeMes(comp))}, pagamento entre ${dataBR(j.inicio)} e ${dataBR(j.fim)}` : 'Todos os meses';
+  const chips = [['', 'Todas'], ['pendentes', 'Pendentes'], ['vencida', 'Vencidas'], ['paga', 'Pagas']];
+
+  view.innerHTML = topo('Cobranças', sub, `<button class="btn" id="b-csv">${I.baixar} Exportar planilha</button>`) + `
+  <div class="grid g-3">
+    <div class="card kpi"><div class="rot">Total cobrado</div><div class="val num">${brl(resumo.total)}</div><div class="det">${resumo.quantidade} ${resumo.quantidade === 1 ? 'cliente' : 'clientes'}</div></div>
+    <div class="card kpi"><div class="rot">Recebido</div><div class="val num" style="color:var(--green)">${brl(resumo.pago)}</div><div class="det">${resumo.total ? Math.round(resumo.pago / resumo.total * 100) : 0}% do total</div></div>
+    <div class="card kpi"><div class="rot">Falta receber</div><div class="val num">${brl(resumo.saldo)}</div><div class="det">${faturas.filter((f) => f.saldo > 0).length} em aberto</div></div>
+  </div>
+  <div class="sep"></div>
+  <div class="card">
+    <div class="filtros">
+      <input type="month" class="input" id="f-comp" value="${esc(comp)}" title="Mês dos serviços">
+      ${comp ? '' : '<span class="muted small">Todos os meses</span>'}
+      <button class="btn sm" id="b-todos">${comp ? 'Ver todos os meses' : 'Voltar para o mês atual'}</button>
+      <div class="chips" style="margin-left:auto">${chips.map(([v, l]) => `<button class="chip ${status === v ? 'ativo' : ''}" data-st="${v}">${l}</button>`).join('')}</div>
+    </div>
+    <div class="tabela-wrap">${faturas.length ? `<table>
+      <thead><tr><th>Cliente</th>${comp ? '' : '<th>Mês</th>'}<th class="esconde-mobile">Serviços</th><th class="dir">Total</th><th class="dir esconde-mobile">Pago</th><th class="dir">Falta</th><th>Situação</th><th></th></tr></thead>
+      <tbody>${faturas.map((f, i) => `<tr class="clicavel" data-ir="#/fatura/${f.cliente_id}/${f.competencia}">
+        <td><b>${esc(f.cliente_nome)}</b></td>
+        ${comp ? '' : `<td>${esc(nomeMesCurto(f.competencia))}</td>`}
+        <td class="esconde-mobile">${f.qtd}</td>
+        <td class="dir num">${brl(f.total)}</td>
+        <td class="dir num esconde-mobile">${brl(f.pago)}</td>
+        <td class="dir num"><b>${brl(Math.max(f.saldo, 0))}</b></td>
+        <td>${tagStatus(f.status)}</td>
+        <td class="acoes-td">${f.saldo > 0 ? `<button class="btn sm" data-rec="${i}">Receber</button>` : ''}</td></tr>`).join('')}</tbody>
+    </table>` : '<div class="vazio"><b>Nenhuma cobrança aqui</b>Não há serviços para esse filtro.</div>'}</div>
+  </div>`;
+
+  const ir = (c, s) => { const p = new URLSearchParams(); p.set('competencia', c); if (s) p.set('status', s); location.hash = '#/cobrancas?' + p; };
+  $('#f-comp').addEventListener('change', (e) => ir(e.target.value, status));
+  $('#b-todos').onclick = () => ir(comp ? '' : padrao, status);
+  $$('[data-st]').forEach((b) => b.onclick = () => ir(comp, b.dataset.st));
+  $$('[data-ir]').forEach((tr) => tr.addEventListener('click', (e) => { if (!e.target.closest('button')) location.hash = tr.dataset.ir; }));
+  $$('[data-rec]').forEach((b) => b.onclick = () => modalPagamento(faturas[Number(b.dataset.rec)], render));
+  $('#b-csv').onclick = () => {
+    const linhas = [['Cliente', 'Telefone', 'Mês dos serviços', 'Vence de', 'Vence até', 'Qtd serviços', 'Total', 'Pago', 'Falta', 'Situação']];
+    faturas.forEach((f) => linhas.push([f.cliente_nome, f.cliente_telefone || '', nomeMesCurto(f.competencia), dataBR(f.inicio), dataBR(f.fim), f.qtd,
+      (f.total / 100).toFixed(2).replace('.', ','), (f.pago / 100).toFixed(2).replace('.', ','), (Math.max(f.saldo, 0) / 100).toFixed(2).replace('.', ','), STATUS[f.status]]));
+    const csv = '﻿' + linhas.map((l) => l.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(';')).join('\r\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = `cobrancas-${comp || 'todas'}.csv`; a.click();
+  };
+}
+
+function modalPagamento(f, aoSalvar) {
+  const formas = ['Pix', 'Dinheiro', 'Cartão de débito', 'Cartão de crédito', 'Boleto', 'Transferência', 'Outro'];
+  const m = abrirModal({
+    titulo: 'Registrar pagamento',
+    corpo: `<form id="f-pag"><div class="erro" hidden></div>
+      <p style="margin:0 0 14px">${esc(f.cliente_nome)}, serviços de <b>${esc(nomeMes(f.competencia))}</b>.<br><span class="muted">Falta receber ${brl(f.saldo)}</span></p>
+      <div class="campo"><label>Valor recebido</label><input class="input grande num" name="valor"></div>
+      <div class="linha">
+        <div class="campo"><label>Data</label><input class="input" type="date" name="data" value="${hojeISO()}"></div>
+        <div class="campo"><label>Forma</label><select class="input" name="forma">${formas.map((x) => `<option>${x}</option>`).join('')}</select></div>
+      </div>
+      <div class="campo"><label>Observação (opcional)</label><input class="input" name="obs"></div>
+      <button hidden></button></form>`,
+    rodape: `<button class="btn" data-fechar>Cancelar</button><button class="btn pri" data-salvar>${I.dinheiro} Confirmar recebimento</button>`,
+  });
+  const fm = $('#f-pag', m);
+  const valor = $('[name=valor]', fm);
+  mascaraDinheiro(valor, Math.max(f.saldo, 0));
+  setTimeout(() => valor.select(), 40);
+  const salvar = async (e) => {
+    e && e.preventDefault();
+    const er = $('.erro', fm);
+    try {
+      await api('/pagamentos', { method: 'POST', body: {
+        cliente_id: f.cliente_id, competencia: f.competencia, valor_centavos: centavosDe(valor),
+        data_pagamento: $('[name=data]', fm).value, forma: $('[name=forma]', fm).value, observacao: $('[name=obs]', fm).value,
+      } });
+      fecharModal(); toast('Pagamento registrado.'); aoSalvar && aoSalvar();
+    } catch (ex) { er.textContent = ex.message; er.hidden = false; }
+  };
+  fm.addEventListener('submit', salvar);
+  $('[data-salvar]', m).onclick = salvar;
+}
+
+/* =================================== fatura =================================== */
+function linkWhats(cliente, fatura, servicos) {
+  const tel = String(cliente.telefone || '').replace(/\D/g, '');
+  const num = tel.length >= 10 && tel.length <= 11 ? '55' + tel : tel;
+  const primeiro = String(cliente.nome).split(' ')[0];
+  const linhas = servicos.map((s) => `• ${diaMes(s.data_servico)} ${s.descricao}${s.veiculo ? ` (${s.veiculo})` : ''}: ${brl(s.valor_centavos)}`);
+  const msg = [
+    `Olá, ${primeiro}! Tudo bem?`,
+    ``,
+    `Segue o resumo dos serviços feitos na ${S.config.nome_oficina} em ${nomeMes(fatura.competencia)}:`,
+    ``,
+    ...linhas,
+    ``,
+    `*Total: ${brl(fatura.total)}*`,
+    ...(fatura.pago > 0 ? [`Já pago: ${brl(fatura.pago)}`, `*Valor em aberto: ${brl(fatura.saldo)}*`] : []),
+    ``,
+    fatura.status === 'vencida'
+      ? `O prazo de pagamento era até ${dataBR(fatura.fim)}.`
+      : `Pagamento entre ${dataBR(fatura.inicio)} e ${dataBR(fatura.fim)}.`,
+    ...(S.config.chave_pix ? [`Chave Pix: ${S.config.chave_pix}`] : []),
+    ``,
+    `Qualquer dúvida, é só chamar. Obrigado pela confiança!`,
+  ].join('\n');
+  return (num ? `https://wa.me/${num}` : 'https://wa.me/') + '?text=' + encodeURIComponent(msg);
+}
+
+async function vFatura(view, clienteId, comp) {
+  const d = await api(`/faturas/${clienteId}/${comp}`);
+  const { cliente, fatura: f, servicos, pagamentos } = d;
+  view.innerHTML = `<a href="#/cobrancas?competencia=${comp}" class="btn sm nao-imprime" style="margin-bottom:12px">${I.voltar} Cobranças</a>` +
+    topo(`${esc(cliente.nome)}`, `Serviços de ${esc(nomeMes(comp))} · pagamento entre ${dataBR(f.inicio)} e ${dataBR(f.fim)}`,
+      `${f.saldo > 0 && servicos.length ? `<a class="btn zap" target="_blank" rel="noopener" href="${esc(linkWhats(cliente, f, servicos))}">${I.zap} Cobrar no WhatsApp</a>` : ''}
+       <button class="btn" onclick="window.print()">${I.print} Imprimir</button>
+       ${f.saldo > 0 ? `<button class="btn pri" id="b-rec">${I.dinheiro} Receber</button>` : ''}`) + `
+  <div class="print-only" style="margin-bottom:12px"><b>${esc(S.config.nome_oficina)}</b>${S.config.chave_pix ? ` · Chave Pix: ${esc(S.config.chave_pix)}` : ''}</div>
+  <div class="card">
+    <div class="card-h"><h3>Resumo</h3>${tagStatus(f.status)}</div>
+    <div class="resumo-fatura">
+      <div><span>Total dos serviços</span><b class="num">${brl(f.total)}</b></div>
+      <div><span>Já pago</span><b class="num" style="color:var(--green)">${brl(f.pago)}</b></div>
+      <div><span>Falta pagar</span><b class="num">${brl(Math.max(f.saldo, 0))}</b></div>
+    </div>
+  </div>
+  <div class="sep"></div>
+  <div class="card">
+    <div class="card-h"><h3>Serviços do mês</h3><a class="btn sm nao-imprime" href="#/lancar?cliente=${cliente.id}">${I.mais} Lançar para este cliente</a></div>
+    <div class="tabela-wrap">${servicos.length ? `<table>
+      <thead><tr><th>Data</th><th>Serviço</th><th class="esconde-mobile">Veículo</th><th class="dir">Valor</th><th class="nao-imprime"></th></tr></thead>
+      <tbody>${servicos.map((s) => `<tr><td class="num">${dataBR(s.data_servico)}</td><td>${esc(s.descricao)}</td><td class="esconde-mobile muted">${esc(s.veiculo || '')}</td><td class="dir num">${brl(s.valor_centavos)}</td>
+        <td class="acoes-td nao-imprime"><button class="icon-btn" data-ed="${s.id}" title="Editar">${I.editar}</button></td></tr>`).join('')}</tbody>
+      <tfoot><tr><td colspan="3">Total</td><td class="dir num">${brl(f.total)}</td><td class="nao-imprime"></td></tr></tfoot>
+    </table>` : '<div class="vazio"><b>Sem serviços nesse mês</b></div>'}</div>
+  </div>
+  <div class="sep"></div>
+  <div class="card">
+    <div class="card-h"><h3>Pagamentos</h3></div>
+    ${pagamentos.length ? `<div class="tabela-wrap"><table>
+      <thead><tr><th>Data</th><th>Forma</th><th class="esconde-mobile">Observação</th><th class="dir">Valor</th><th class="nao-imprime"></th></tr></thead>
+      <tbody>${pagamentos.map((p) => `<tr><td class="num">${dataBR(p.data_pagamento)}</td><td>${esc(p.forma || '')}</td><td class="esconde-mobile muted">${esc(p.observacao || '')}</td><td class="dir num">${brl(p.valor_centavos)}</td>
+        <td class="acoes-td nao-imprime"><button class="icon-btn" data-delp="${p.id}" title="Desfazer pagamento">${I.lixo}</button></td></tr>`).join('')}</tbody></table></div>`
+      : '<div class="vazio">Nenhum pagamento registrado ainda.</div>'}
+  </div>`;
+  const b = $('#b-rec'); if (b) b.onclick = () => modalPagamento({ ...f, cliente_nome: cliente.nome }, render);
+  $$('[data-ed]').forEach((x) => x.onclick = () => modalServico(servicos.find((s) => s.id === Number(x.dataset.ed)), render));
+  $$('[data-delp]').forEach((x) => x.onclick = async () => {
+    const p = pagamentos.find((y) => y.id === Number(x.dataset.delp));
+    if (!(await confirmar('Desfazer pagamento', `Remover o pagamento de ${brl(p.valor_centavos)} feito em ${dataBR(p.data_pagamento)}?`, 'Remover'))) return;
+    try { await api(`/pagamentos/${p.id}`, { method: 'DELETE' }); toast('Pagamento removido.'); render(); } catch (ex) { toast(ex.message, true); }
+  });
+}
+
+/* ================================== clientes ================================== */
+async function vClientes(view, params) {
+  const inativos = params.get('inativos') === '1';
+  const { clientes } = await api('/clientes' + (inativos ? '?inativos=1' : ''));
+  if (!inativos) S.clientes = clientes;
+  view.innerHTML = topo('Clientes', `${clientes.length} ${clientes.length === 1 ? 'cliente' : 'clientes'}${inativos ? ' (incluindo inativos)' : ''}`, `<button class="btn pri" id="b-novo">${I.mais} Novo cliente</button>`) + `
+  <div class="card">
+    <div class="filtros">
+      <div class="busca">${I.busca}<input class="input" id="f-q" placeholder="Buscar por nome, telefone ou documento"></div>
+      <label class="small muted" style="margin-left:auto;display:flex;gap:6px;align-items:center"><input type="checkbox" id="f-in" ${inativos ? 'checked' : ''}> Mostrar inativos</label>
+    </div>
+    <div class="tabela-wrap"><table>
+      <thead><tr><th>Cliente</th><th class="esconde-mobile">WhatsApp</th><th class="esconde-mobile">Último serviço</th><th class="dir">Em aberto</th></tr></thead>
+      <tbody id="tb-cli"></tbody></table>
+      <div class="vazio" id="cli-vazio" hidden><b>Nenhum cliente encontrado</b>Cadastre pelo botão "Novo cliente" ou direto ao lançar um serviço.</div>
+    </div>
+  </div>`;
+  const desenhar = () => {
+    const q = normal($('#f-q').value.trim());
+    const lista = clientes.filter((c) => !q || normal(c.nome).includes(q) || normal(c.telefone).includes(q) || normal(c.documento).includes(q));
+    $('#tb-cli').innerHTML = lista.map((c) => `<tr class="clicavel" data-id="${c.id}">
+      <td><b>${esc(c.nome)}</b>${c.ativo ? '' : ' <span class="tag st-em_aberto">Inativo</span>'}</td>
+      <td class="esconde-mobile">${esc(c.telefone || '')}</td>
+      <td class="esconde-mobile">${c.ultimo_servico ? dataBR(c.ultimo_servico) : '<span class="muted">Nenhum</span>'}</td>
+      <td class="dir num">${c.saldo > 0 ? `<b>${brl(c.saldo)}</b>` : '<span class="muted">R$ 0,00</span>'}</td></tr>`).join('');
+    $('#cli-vazio').hidden = lista.length > 0;
+    $$('#tb-cli tr').forEach((tr) => tr.onclick = () => (location.hash = `#/clientes/${tr.dataset.id}`));
+  };
+  $('#f-q').addEventListener('input', desenhar);
+  $('#f-in').addEventListener('change', (e) => (location.hash = e.target.checked ? '#/clientes?inativos=1' : '#/clientes'));
+  $('#b-novo').onclick = async () => { const c = await modalCliente(); if (c) location.hash = `#/clientes/${c.id}`; };
+  desenhar();
+}
+
+async function vCliente(view, id) {
+  const { cliente, faturas, saldo_total } = await api(`/clientes/${id}`);
+  const tel = String(cliente.telefone || '').replace(/\D/g, '');
+  view.innerHTML = `<a href="#/clientes" class="btn sm" style="margin-bottom:12px">${I.voltar} Clientes</a>` +
+    topo(esc(cliente.nome) + (cliente.ativo ? '' : ' <span class="tag st-em_aberto">Inativo</span>'),
+      [cliente.telefone, cliente.documento].filter(Boolean).map(esc).join(' · ') || 'Sem contato cadastrado',
+      `${tel ? `<a class="btn zap" target="_blank" rel="noopener" href="https://wa.me/${tel.length <= 11 ? '55' + tel : tel}">${I.zap} WhatsApp</a>` : ''}
+       <button class="btn" id="b-ed">${I.editar} Editar</button>
+       <a class="btn pri" href="#/lancar?cliente=${cliente.id}">${I.mais} Lançar serviço</a>`) + `
+  <div class="grid g-3">
+    <div class="card kpi"><div class="rot">Em aberto</div><div class="val num">${brl(saldo_total)}</div><div class="det">Soma de tudo que ainda não foi pago</div></div>
+    <div class="card kpi"><div class="rot">Total em serviços</div><div class="val num">${brl(faturas.reduce((a, f) => a + f.total, 0))}</div><div class="det">${faturas.reduce((a, f) => a + f.qtd, 0)} serviços no histórico</div></div>
+    <div class="card kpi"><div class="rot">Observações</div><div class="det" style="margin-top:8px;color:var(--ink-2)">${esc(cliente.observacoes || 'Nenhuma')}</div></div>
+  </div>
+  <div class="sep"></div>
+  <div class="card">
+    <div class="card-h"><h3>Cobranças por mês</h3></div>
+    <div class="tabela-wrap">${faturas.length ? `<table>
+      <thead><tr><th>Mês dos serviços</th><th class="esconde-mobile">Vencimento</th><th class="dir">Total</th><th class="dir esconde-mobile">Pago</th><th class="dir">Falta</th><th>Situação</th></tr></thead>
+      <tbody>${faturas.map((f) => `<tr class="clicavel" data-ir="#/fatura/${cliente.id}/${f.competencia}">
+        <td><b>${esc(nomeMesCurto(f.competencia))}</b> <span class="muted small">${f.qtd} ${f.qtd === 1 ? 'serviço' : 'serviços'}</span></td>
+        <td class="esconde-mobile">${diaMes(f.inicio)} a ${diaMes(f.fim)}</td>
+        <td class="dir num">${brl(f.total)}</td><td class="dir num esconde-mobile">${brl(f.pago)}</td>
+        <td class="dir num"><b>${brl(Math.max(f.saldo, 0))}</b></td><td>${tagStatus(f.status)}</td></tr>`).join('')}</tbody></table>`
+      : `<div class="vazio"><b>Nenhum serviço para este cliente</b><a href="#/lancar?cliente=${cliente.id}">Lançar o primeiro</a>${''}</div>`}</div>
+  </div>
+  ${faturas.length ? '' : `<div class="sep"></div><button class="btn perigo" id="b-del">${I.lixo} Excluir cliente</button>`}`;
+  $$('[data-ir]').forEach((tr) => tr.onclick = () => (location.hash = tr.dataset.ir));
+  $('#b-ed').onclick = async () => { if (await modalCliente(cliente)) render(); };
+  const del = $('#b-del');
+  if (del) del.onclick = async () => {
+    if (!(await confirmar('Excluir cliente', `Excluir ${esc(cliente.nome)} da carteira?`, 'Excluir'))) return;
+    try { await api(`/clientes/${cliente.id}`, { method: 'DELETE' }); await carregarClientes(true); toast('Cliente excluído.'); location.hash = '#/clientes'; }
+    catch (ex) { toast(ex.message, true); }
+  };
+}
+
+/* ================================== ajustes ================================== */
+async function vConfig(view) {
+  const cfg = await api('/config');
+  S.config = cfg;
+  const admin = S.usuario.admin;
+  view.innerHTML = topo('Ajustes', admin ? 'Dados da oficina, equipe e senha' : 'Sua senha de acesso') + `
+  <div class="grid g-2" style="align-items:start">
+    <form class="card" id="f-cfg">
+      <div class="card-h"><h3>Oficina e vencimento</h3></div>
+      <div class="card-b"><div class="erro" hidden></div>
+        <div class="campo"><label>Nome da oficina</label><input class="input" name="nome_oficina" value="${esc(cfg.nome_oficina)}" ${admin ? '' : 'disabled'}></div>
+        <div class="campo"><label>Chave Pix (vai na mensagem de cobrança)</label><input class="input" name="chave_pix" value="${esc(cfg.chave_pix)}" placeholder="CNPJ, celular, e-mail ou chave aleatória" ${admin ? '' : 'disabled'}></div>
+        <div class="linha">
+          <div class="campo"><label>Pagamento a partir do dia</label><input class="input" type="number" min="1" max="31" name="dia_inicio" value="${cfg.dia_inicio}" ${admin ? '' : 'disabled'}></div>
+          <div class="campo"><label>Até o dia</label><input class="input" type="number" min="1" max="31" name="dia_fim" value="${cfg.dia_fim}" ${admin ? '' : 'disabled'}></div>
+        </div>
+        <div class="dica">${I.info}<span>Os serviços de um mês são cobrados entre esses dias do mês seguinte. Ex: serviços de novembro vencem de ${pad(cfg.dia_inicio)}/12 a ${pad(cfg.dia_fim)}/12.</span></div>
+        ${admin ? '<div class="sep"></div><button class="btn pri" type="submit">Salvar ajustes</button>' : ''}
+      </div>
+    </form>
+    <form class="card" id="f-senha">
+      <div class="card-h"><h3>Minha senha</h3></div>
+      <div class="card-b"><div class="erro" hidden></div>
+        <div class="campo"><label>Senha atual</label><input class="input" type="password" name="senha_atual" autocomplete="current-password" required></div>
+        <div class="campo"><label>Nova senha (mínimo 8 caracteres)</label><input class="input" type="password" name="senha_nova" minlength="8" autocomplete="new-password" required></div>
+        <button class="btn esc" type="submit">Trocar senha</button>
+      </div>
+    </form>
+  </div>
+  ${admin ? `<div class="sep"></div><div class="card"><div class="card-h"><h3>Equipe com acesso</h3><button class="btn sm" id="b-novo-u">${I.mais} Adicionar pessoa</button></div><div id="usuarios"></div></div>` : ''}
+  <div class="sep"></div>
+  <button class="btn" id="b-sair2" style="display:none">Sair da conta</button>`;
+
+  if (admin) {
+    $('#f-cfg').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const body = Object.fromEntries(new FormData(e.target));
+      body.dia_inicio = Number(body.dia_inicio); body.dia_fim = Number(body.dia_fim);
+      const er = $('.erro', e.target); er.hidden = true;
+      try { S.config = await api('/config', { method: 'PUT', body }); $('#nome-oficina').textContent = S.config.nome_oficina; toast('Ajustes salvos.'); }
+      catch (ex) { er.textContent = ex.message; er.hidden = false; }
+    });
+    const desenharUsuarios = (usuarios) => {
+      $('#usuarios').innerHTML = `<div class="tabela-wrap"><table><thead><tr><th>Nome</th><th>Usuário</th><th>Acesso</th><th></th></tr></thead><tbody>
+        ${usuarios.map((u) => `<tr><td><b>${esc(u.nome)}</b>${u.id === S.usuario.id ? ' <span class="muted small">(você)</span>' : ''}</td><td>${esc(u.usuario)}</td>
+        <td>${u.ativo ? (u.admin ? '<span class="tag st-a_vencer">Administrador</span>' : '<span class="tag st-paga">Equipe</span>') : '<span class="tag st-vencida">Bloqueado</span>'}</td>
+        <td class="acoes-td"><button class="icon-btn" data-u="${u.id}" title="Editar">${I.editar}</button></td></tr>`).join('')}</tbody></table></div>`;
+      $$('[data-u]').forEach((b) => b.onclick = () => modalUsuario(usuarios.find((u) => u.id === Number(b.dataset.u)), desenharUsuarios));
+    };
+    desenharUsuarios((await api('/usuarios')).usuarios);
+    $('#b-novo-u').onclick = () => modalUsuario(null, desenharUsuarios);
+  }
+  $('#f-senha').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const body = Object.fromEntries(new FormData(e.target));
+    const er = $('.erro', e.target); er.hidden = true;
+    try { await api('/me/senha', { method: 'PUT', body }); e.target.reset(); toast('Senha alterada.'); }
+    catch (ex) { er.textContent = ex.message; er.hidden = false; }
+  });
+  if (window.matchMedia('(max-width:820px)').matches) {
+    const b = $('#b-sair2'); b.style.display = ''; b.onclick = () => $('#btn-sair').click();
+  }
+}
+
+function modalUsuario(u, aoSalvar) {
+  const novo = !u;
+  const m = abrirModal({
+    titulo: novo ? 'Adicionar pessoa' : 'Editar acesso',
+    corpo: `<form id="f-u"><div class="erro" hidden></div>
+      <div class="campo"><label>Nome</label><input class="input" name="nome" required value="${esc(u?.nome)}"></div>
+      <div class="campo"><label>Usuário para entrar</label><input class="input" name="usuario" autocapitalize="none" ${novo ? 'required' : 'disabled'} value="${esc(u?.usuario)}"></div>
+      <div class="campo"><label>${novo ? 'Senha (mínimo 8 caracteres)' : 'Nova senha (deixe em branco para manter)'}</label><input class="input" type="password" name="senha" autocomplete="new-password" ${novo ? 'required minlength="8"' : ''}></div>
+      <label style="display:flex;gap:8px;align-items:center;margin-bottom:8px"><input type="checkbox" name="admin" ${u?.admin ? 'checked' : ''}> Administrador (pode mexer nos ajustes e na equipe)</label>
+      ${novo ? '' : `<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" name="ativo" ${u.ativo ? 'checked' : ''}> Acesso liberado</label>`}
+      <button hidden></button></form>`,
+    rodape: `<button class="btn" data-fechar>Cancelar</button><button class="btn pri" data-salvar>${novo ? 'Adicionar' : 'Salvar'}</button>`,
+  });
+  const f = $('#f-u', m);
+  const salvar = async (e) => {
+    e && e.preventDefault();
+    const body = { nome: f.nome.value, admin: f.admin.checked };
+    if (f.senha.value) body.senha = f.senha.value;
+    if (novo) body.usuario = f.usuario.value; else body.ativo = f.ativo.checked;
+    try {
+      const r = novo ? await api('/usuarios', { method: 'POST', body }) : await api(`/usuarios/${u.id}`, { method: 'PUT', body });
+      fecharModal(); toast(novo ? 'Pessoa adicionada.' : 'Acesso atualizado.'); aoSalvar(r.usuarios);
+    } catch (ex) { const er = $('.erro', f); er.textContent = ex.message; er.hidden = false; }
+  };
+  f.addEventListener('submit', salvar);
+  $('[data-salvar]', m).onclick = salvar;
+}
+
+boot();
+</script>
+</body>
+</html>
