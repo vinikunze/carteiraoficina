@@ -259,6 +259,10 @@ async function rotear(request, env, url) {
       if (metodo === 'GET') return carteira(env);
       break;
 
+    case 'relatorios':
+      if (metodo === 'GET') return relatorios(env, url);
+      break;
+
     case 'clientes':
       if (metodo === 'GET' && !id) return listarClientes(env, url);
       if (metodo === 'POST' && !id) return criarCliente(request, env);
@@ -618,6 +622,81 @@ async function excluirAnotacao(env, id) {
   const r = await env.DB.prepare('DELETE FROM anotacoes WHERE id = ?').bind(id).run();
   if (!r.meta.changes) falha(404, 'Anotação não encontrada.');
   return json({ ok: true });
+}
+
+/* -------------------------------------------------------------- relatórios */
+
+const FAIXAS_IDADE = [
+  { id: 'em_dia', nome: 'Ainda não venceu' },
+  { id: 'ate30', nome: '1 a 30 dias de atraso' },
+  { id: 'ate60', nome: '31 a 60 dias de atraso' },
+  { id: 'mais60', nome: 'Mais de 60 dias de atraso' },
+];
+
+async function relatorios(env, url) {
+  const n = Number(url.searchParams.get('meses')) === 6 ? 6 : 12;
+  const cfg = await lerConfig(env);
+  const hoje = hojeLocal();
+  const compAtual = competenciaDe(hoje);
+  const comps = [compAtual];
+  while (comps.length < n) comps.unshift(mesAnterior(comps[0]));
+  const desde = comps[0];
+
+  const [serv, receb, pags, faturas] = await Promise.all([
+    env.DB.prepare('SELECT competencia, SUM(valor_centavos) AS v FROM servicos WHERE competencia >= ? GROUP BY competencia').bind(desde).all(),
+    env.DB.prepare("SELECT substr(data_pagamento, 1, 7) AS m, SUM(valor_centavos) AS v FROM pagamentos WHERE data_pagamento >= ? GROUP BY m").bind(desde + '-01').all(),
+    env.DB.prepare('SELECT competencia, data_pagamento, valor_centavos FROM pagamentos WHERE competencia >= ?').bind(desde).all(),
+    buscarFaturas(env, { cfg }),
+  ]);
+  const feito = Object.fromEntries(serv.results.map((r) => [r.competencia, r.v]));
+  const entrou = Object.fromEntries(receb.results.map((r) => [r.m, r.v]));
+
+  // 1. serviços feitos no mês x dinheiro que entrou no mês
+  const movimento = comps.map((c) => ({ competencia: c, servicos: feito[c] || 0, recebido: entrou[c] || 0 }));
+
+  // 4. pontualidade: de cada mês já fechado, quanto foi pago no prazo, com atraso e quanto falta
+  const pont = {};
+  for (const c of comps.slice(0, -1)) pont[c] = { competencia: c, total: feito[c] || 0, no_prazo: 0, atrasado: 0, em_aberto: 0, fim: janelaVencimento(c, cfg).fim };
+  for (const p of pags.results) {
+    const x = pont[p.competencia];
+    if (!x) continue;
+    if (p.data_pagamento <= x.fim) x.no_prazo += p.valor_centavos; else x.atrasado += p.valor_centavos;
+  }
+  const pontualidade = Object.values(pont).map((x) => {
+    // pagamentos acima do total (crédito) não contam
+    const noPrazo = Math.min(x.no_prazo, x.total);
+    const atrasado = Math.min(x.atrasado, x.total - noPrazo);
+    return { competencia: x.competencia, total: x.total, no_prazo: noPrazo, atrasado, em_aberto: x.total - noPrazo - atrasado };
+  });
+
+  // 2. idade da dívida
+  const idade = FAIXAS_IDADE.map((f) => ({ ...f, valor: 0, clientes: new Set() }));
+  for (const f of faturas) {
+    if (f.saldo <= 0) continue;
+    let i = 0;
+    if (f.status === 'vencida') {
+      const d = diasEntre(f.fim, hoje);
+      i = d <= 30 ? 1 : d <= 60 ? 2 : 3;
+    }
+    idade[i].valor += f.saldo;
+    idade[i].clientes.add(f.cliente_id);
+  }
+
+  // 3. quem mais deve
+  const { clientes } = await montarCarteira(env, faturas, hoje);
+  const devedores = clientes
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 10)
+    .map((c) => ({ cliente_id: c.cliente_id, cliente_nome: c.cliente_nome, total: c.total, vencido: c.vencido, atraso_dias: c.atraso_dias }));
+
+  return json({
+    hoje,
+    meses: n,
+    movimento,
+    pontualidade,
+    idade: idade.map((f) => ({ id: f.id, nome: f.nome, valor: f.valor, clientes: f.clientes.size })),
+    devedores,
+  });
 }
 
 /* ---------------------------------------------------------------- clientes */

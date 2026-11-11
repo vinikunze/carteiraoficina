@@ -6,8 +6,13 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0b0b0b">
 <title>Carteira de Clientes</title>
+<link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/icone.png">
-<link rel="icon" type="image/png" href="/icone.png">
+<link rel="icon" type="image/png" href="/favicon-64.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Carteira">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -209,6 +214,40 @@ tfoot td{font-weight:700;background:#fafaf8;border-top:1px solid var(--line)}
 .timeline{list-style:none;margin:0;padding:0}
 .timeline li{padding:12px 18px;border-bottom:1px solid var(--line-2);display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
 .timeline li:last-child{border-bottom:0}
+
+/* gráficos */
+.graf{position:relative;width:100%}
+.graf svg{display:block;width:100%;height:auto;overflow:visible}
+.graf .grade{stroke:#ebebe6;stroke-width:1;shape-rendering:crispEdges}
+.graf .eixo-txt{fill:var(--ink-3);font-size:11px;font-variant-numeric:tabular-nums}
+.graf .faixa{fill:transparent;cursor:default;outline:none}
+.graf .faixa:hover,.graf .faixa:focus{fill:rgba(17,17,17,.045)}
+.legenda{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-2);margin-bottom:10px}
+.legenda span{display:inline-flex;align-items:center;gap:6px}
+.legenda i{width:10px;height:10px;border-radius:3px;display:inline-block}
+#dica-graf{position:fixed;z-index:300;pointer-events:none;background:#111;color:#fff;border-radius:9px;padding:9px 11px;font-size:12.5px;box-shadow:0 10px 30px rgba(0,0,0,.25);min-width:170px;max-width:260px}
+#dica-graf b{display:block;margin-bottom:5px;font-size:13px}
+#dica-graf .lin{display:flex;justify-content:space-between;gap:14px;align-items:center;font-variant-numeric:tabular-nums}
+#dica-graf .lin span{display:inline-flex;align-items:center;gap:6px;color:#cfcfc8}
+#dica-graf .lin i{width:9px;height:9px;border-radius:2px;display:inline-block}
+.tab-graf{margin-top:12px;border:1px solid var(--line-2);border-radius:10px;overflow:auto}
+.tab-graf td,.tab-graf th{padding:8px 12px;font-size:12.5px}
+.btn-tab{background:none;border:0;color:var(--ink-2);font-weight:600;font-size:12.5px;cursor:pointer;padding:4px 0;text-decoration:underline;text-underline-offset:3px}
+.segbar{display:flex;gap:2px;height:28px;margin:4px 0 14px}
+.segbar div{border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:12px;font-weight:600;white-space:nowrap;overflow:visible;min-width:0}
+.hbar{list-style:none;margin:0;padding:0}
+.hbar a{display:grid;grid-template-columns:minmax(110px,190px) 1fr auto;gap:12px;align-items:center;padding:7px 0;text-decoration:none}
+.hbar a:hover .hbar-nome{text-decoration:underline}
+.hbar-nome{font-weight:600;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hbar-nome small{display:block;font-weight:500;color:var(--ink-3);font-size:11.5px}
+.hbar-trilho{height:14px;display:block}
+.hbar-barra{display:block;height:14px;border-radius:0 4px 4px 0;min-width:3px}
+.hbar-val{font-weight:700;font-size:13px;font-variant-numeric:tabular-nums;text-align:right}
+.instalar{display:flex;align-items:center;gap:12px;background:var(--side);color:#fff;border-radius:var(--radius);padding:12px 14px;margin-bottom:16px}
+.instalar img{width:40px;height:40px;border-radius:10px;flex:none}
+.instalar div{flex:1;min-width:0;font-size:13px;color:#cfcfc8}
+.instalar b{color:#fff;display:block;font-size:14px}
+.instalar .icon-btn{color:#aaa}
 .sep{height:16px}
 .print-only{display:none}
 
@@ -236,11 +275,13 @@ tfoot td{font-weight:700;background:#fafaf8;border-top:1px solid var(--line)}
   .esconde-mobile{display:none}
   td,th{padding:10px}
   .dev{padding:14px}
+  .hbar a{grid-template-columns:minmax(90px,120px) 1fr auto;gap:8px}
   .dev-acoes .btn{flex:1}
 }
 .topo-mobile{display:none;align-items:center;justify-content:space-between;background:var(--side);margin:-18px -14px 16px;padding:12px 14px;border-bottom:2px solid var(--accent)}
 .topo-mobile img{height:34px;width:auto;display:block}
 @media (max-width:820px){ .topo-mobile{display:flex} }
+@media (min-width:600px) and (max-width:820px){ .g-3{grid-template-columns:repeat(3,minmax(0,1fr))} .g-3 .kpi .val{font-size:20px} }
 @media (max-width:480px){ .g-4{grid-template-columns:1fr 1fr} .kpi .val{font-size:19px} }
 
 @media print{
@@ -293,6 +334,7 @@ tfoot td{font-weight:700;background:#fafaf8;border-top:1px solid var(--line)}
       <a href="#/cobrancas" data-r="cobrancas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Cobranças</span></a>
       <a href="#/clientes" data-r="clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/><path d="M16 4a4 4 0 0 1 0 8M22 21c0-3-1.8-5.6-4.5-6.6"/></svg><span>Clientes</span></a>
       <a href="#/servicos" data-r="servicos" class="so-desktop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4Z"/></svg><span>Serviços</span></a>
+      <a href="#/relatorios" data-r="relatorios" class="so-desktop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M8 17v-5M13 17V8M18 17v-9"/></svg><span>Relatórios</span></a>
       <a href="#/config" data-r="config"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg><span>Ajustes</span></a>
     </nav>
     <div class="side-foot">
@@ -302,13 +344,14 @@ tfoot td{font-weight:700;background:#fafaf8;border-top:1px solid var(--line)}
     </div>
   </aside>
   <main>
-    <div class="topo-mobile"><img src="/logo.png" alt=""><a href="#/servicos" class="btn sm">Serviços</a></div>
+    <div class="topo-mobile"><img src="/logo.png" alt=""><div style="display:flex;gap:6px"><a href="#/relatorios" class="btn sm">Relatórios</a><a href="#/servicos" class="btn sm">Serviços</a></div></div>
     <div id="view"></div>
   </main>
 </div>
 
 <div id="modal-root"></div>
 <div id="toasts"></div>
+<div id="dica-graf" hidden></div>
 
 <script>
 'use strict';
@@ -521,6 +564,7 @@ async function render() {
   const r = partes[0] || 'painel';
   $$('#nav a').forEach((a) => a.classList.toggle('ativo', a.dataset.r === r || (r === 'fatura' && a.dataset.r === 'cobrancas')));
   const view = $('#view');
+  S.graficos = []; esconderDica();
   view.innerHTML = '<div class="carregando">Carregando...</div>';
   window.scrollTo(0, 0);
   try {
@@ -529,6 +573,7 @@ async function render() {
     else if (r === 'servicos') await vServicos(view, params);
     else if (r === 'cobrancas') await vCobrancas(view, params);
     else if (r === 'cobrar') await vCobrar(view, params);
+    else if (r === 'relatorios') await vRelatorios(view, params);
     else if (r === 'fatura') await vFatura(view, Number(partes[1]), partes[2]);
     else if (r === 'clientes' && partes[1]) await vCliente(view, Number(partes[1]));
     else if (r === 'clientes') await vClientes(view, params);
@@ -545,7 +590,8 @@ const topo = (titulo, sub = '', acoes = '') =>
 
 /* =================================== painel =================================== */
 async function vPainel(view) {
-  const d = await api('/painel');
+  const [d, rel] = await Promise.all([api('/painel'), api('/relatorios?meses=6').catch(() => null)]);
+  const mov = rel ? cardMovimento(rel.movimento, { compacto: true }) : null;
   S.hoje = d.hoje; S.config = d.config;
   const c = d.cobranca, v = d.vencidas, m = d.mes_atual;
   const pct = c.total ? Math.round((c.recebido / c.total) * 100) : 0;
@@ -556,7 +602,7 @@ async function vPainel(view) {
   else fase = `Prazo de ${nomeMes(c.competencia)} encerrou em ${dataBR(c.fim)}`;
 
   const pr = d.promessas || [];
-  view.innerHTML = topo('Painel', `Hoje é ${dataBR(hoje)}`, `<a class="btn" href="#/cobrar">A cobrar</a><a class="btn pri" href="#/lancar">${I.mais} Lançar serviço</a>`) + `
+  view.innerHTML = faixaInstalar() + topo('Painel', `Hoje é ${dataBR(hoje)}`, `<a class="btn" href="#/cobrar">A cobrar</a><a class="btn pri" href="#/lancar">${I.mais} Lançar serviço</a>`) + `
   <div class="grid g-4">
     <div class="card kpi destaque">
       <div class="rot">A receber de ${esc(nomeMesCurto(c.competencia))}</div>
@@ -581,12 +627,15 @@ async function vPainel(view) {
   </div>
   <div class="sep"></div>
   <div class="grid g-main">
+    <div class="grid" style="align-content:start">
     <div class="card">
       <div class="card-h"><h3>Falta receber de ${esc(nomeMes(c.competencia))}</h3><a class="btn sm" href="#/cobrancas?competencia=${c.competencia}">Ver todas</a></div>
       ${c.lista.length ? `<ul class="lista-simples">${c.lista.map((f) => `
         <li><a href="#/fatura/${f.cliente_id}/${f.competencia}"><b>${esc(f.cliente_nome)}</b><div class="sub">${f.qtd} ${f.qtd === 1 ? 'serviço' : 'serviços'}${f.pago ? ` · pagou ${brl(f.pago)}` : ''}</div></a>
         <div style="text-align:right"><b class="num">${brl(f.saldo)}</b><div>${tagStatus(f.status)}</div></div></li>`).join('')}</ul>`
         : `<div class="vazio"><b>${c.total ? 'Tudo recebido' : 'Nada para cobrar'}</b>${c.total ? 'Todos os clientes desse mês já pagaram.' : 'Não houve serviços nesse mês.'}</div>`}
+    </div>
+    ${mov ? mov.html : ''}
     </div>
     <div class="grid" style="align-content:start">
       ${pr.length ? `<div class="card" style="border-left:4px solid var(--accent)">
@@ -609,6 +658,8 @@ async function vPainel(view) {
       </div>
     </div>
   </div>`;
+  if (mov) mov.ligar(view);
+  ligarFaixaInstalar(view);
 }
 
 /* ================================ clientes (cache) ================================ */
@@ -1238,6 +1289,255 @@ function modalAnotacao(c, aoSalvar) {
   $('[data-salvar]', m).onclick = salvar;
 }
 
+/* ================================== gráficos ================================== */
+/* Desenhados em SVG, sem biblioteca. Cores validadas para daltonismo:
+   azul e amarelo (serviços x recebido), azul/amarelo/vermelho (pontualidade)
+   e uma escala de vermelhos para a idade da dívida. */
+const COR = { azul: '#2a78d6', amarelo: '#eda100', vermelho: '#e34948' };
+const COR_IDADE = ['#f19d9b', '#e3605c', '#c0322f', '#86191a'];
+const SVGNS = 'http://www.w3.org/2000/svg';
+const MES_CURTO = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+const rotuloMes = (comp, comAno) => { const [a, m] = comp.split('-'); return MES_CURTO[Number(m) - 1] + (comAno ? `/${a.slice(2)}` : ''); };
+/* eixo: R$ 0 / R$ 500 / R$ 1 mil / R$ 2,5 mil / R$ 1,2 mi */
+function brlCurto(c) {
+  const v = c / 100;
+  const f = (x) => x.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
+  if (v >= 1e6) return `R$ ${f(v / 1e6)} mi`;
+  if (v >= 1000) return `R$ ${f(v / 1000)} mil`;
+  return `R$ ${Math.round(v)}`;
+}
+function escalaBonita(max) {
+  if (max <= 0) return { topo: 100000, passos: [0, 25000, 50000, 75000, 100000] };
+  const bruto = max / 4;
+  const p10 = 10 ** Math.floor(Math.log10(bruto));
+  const passo = [1, 2, 2.5, 5, 10].map((k) => k * p10).find((x) => x >= bruto);
+  const topo = Math.ceil(max / passo) * passo;
+  const passos = [];
+  for (let v = 0; v <= topo + 1e-6; v += passo) passos.push(v);
+  return { topo, passos };
+}
+const svgEl = (tag, at = {}) => { const e = document.createElementNS(SVGNS, tag); for (const k in at) e.setAttribute(k, at[k]); return e; };
+/* coluna com 4px arredondado só na ponta, reta na base */
+function caminhoColuna(x, y, w, h, arred) {
+  if (h <= 0) return '';
+  const r = arred ? Math.min(4, w / 2, h) : 0;
+  return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`;
+}
+
+function mostrarDica(html, x, y) {
+  const d = $('#dica-graf');
+  d.innerHTML = html; d.hidden = false;
+  const r = d.getBoundingClientRect();
+  let left = x + 14, top = y - r.height - 12;
+  if (left + r.width > innerWidth - 8) left = x - r.width - 14;
+  if (left < 8) left = 8;
+  if (top < 8) top = y + 16;
+  d.style.left = left + 'px'; d.style.top = top + 'px';
+}
+function esconderDica() { const d = $('#dica-graf'); if (d) d.hidden = true; }
+document.addEventListener('scroll', esconderDica, { passive: true });
+document.addEventListener('pointerdown', (e) => { if (!e.target.closest || !e.target.closest('.faixa')) esconderDica(); });
+let tRedim;
+window.addEventListener('resize', () => { clearTimeout(tRedim); tRedim = setTimeout(() => (S.graficos || []).forEach((f) => f()), 150); });
+
+const legendaHTML = (series) => `<div class="legenda">${series.map((s) => `<span><i style="background:${s.cor}"></i>${esc(s.nome)}</span>`).join('')}</div>`;
+const linhaDica = (cor, nome, valor) => `<div class="lin"><span><i style="background:${cor}"></i>${esc(nome)}</span><b style="display:inline;margin:0">${valor}</b></div>`;
+
+/* colunas agrupadas ou empilhadas, uma faixa por mês */
+function graficoColunas(el, { categorias, series, empilhado = false, altura = 230, rodapeDica }) {
+  const desenhar = () => {
+    const W = Math.max(el.clientWidth, 260);
+    const n = categorias.length;
+    const mE = 62, mD = 6, mT = 10, mB = 26;
+    const pw = W - mE - mD, ph = altura - mT - mB;
+    const totais = categorias.map((_, i) => empilhado ? series.reduce((a, s) => a + s.valores[i], 0) : Math.max(...series.map((s) => s.valores[i])));
+    const { topo, passos } = escalaBonita(Math.max(...totais));
+    const yv = (v) => mT + ph - (v / topo) * ph;
+    const svg = svgEl('svg', { viewBox: `0 0 ${W} ${altura}`, role: 'img' });
+    passos.forEach((v) => {
+      svg.appendChild(svgEl('line', { class: 'grade', x1: mE, x2: W - mD, y1: yv(v), y2: yv(v) }));
+      const t = svgEl('text', { class: 'eixo-txt', x: mE - 8, y: yv(v) + 4, 'text-anchor': 'end' }); t.textContent = brlCurto(v); svg.appendChild(t);
+    });
+    const banda = pw / n;
+    const pulo = banda < 30 ? 2 : 1;
+    categorias.forEach((cat, i) => {
+      const x0 = mE + i * banda;
+      const g = svgEl('g');
+      const faixa = svgEl('rect', { class: 'faixa', x: x0, y: mT, width: banda, height: ph, tabindex: 0, 'aria-label': `${cat.titulo}: ${series.map((s) => `${s.nome} ${brl(s.valores[i])}`).join(', ')}` });
+      g.appendChild(faixa);
+      if (empilhado) {
+        const w = Math.min(24, banda * 0.62);
+        const x = x0 + (banda - w) / 2;
+        let base = mT + ph;
+        const vis = series.map((s, k) => ({ s, v: s.valores[i], k })).filter((o) => o.v > 0);
+        vis.forEach((o, j) => {
+          const h = (o.v / topo) * ph - (j > 0 ? 2 : 0);
+          if (h <= 0) return;
+          const y = base - (j > 0 ? 2 : 0) - h;
+          g.appendChild(svgEl('path', { d: caminhoColuna(x, y, w, h, j === vis.length - 1), fill: o.s.cor, 'pointer-events': 'none' }));
+          base = y;
+        });
+      } else {
+        const k = series.length;
+        const w = Math.min(24, (banda * 0.72 - 2 * (k - 1)) / k);
+        const tot = w * k + 2 * (k - 1);
+        series.forEach((s, j) => {
+          const v = s.valores[i];
+          const h = (v / topo) * ph;
+          const x = x0 + (banda - tot) / 2 + j * (w + 2);
+          if (h > 0) g.appendChild(svgEl('path', { d: caminhoColuna(x, mT + ph - h, w, Math.max(h, 1), true), fill: s.cor, 'pointer-events': 'none' }));
+        });
+      }
+      if ((n - 1 - i) % pulo === 0) {
+        const t = svgEl('text', { class: 'eixo-txt', x: x0 + banda / 2, y: altura - 8, 'text-anchor': 'middle' });
+        t.textContent = cat.rotulo; g.appendChild(t);
+      }
+      const dica = () => `<b>${esc(cat.titulo)}</b>` + series.map((s) => linhaDica(s.cor, s.nome, brl(s.valores[i]))).join('') + (rodapeDica ? rodapeDica(i) : '');
+      const abrir = (e) => { const r = faixa.getBoundingClientRect(); mostrarDica(dica(), e && e.clientX ? e.clientX : r.left + r.width / 2, e && e.clientY ? e.clientY : r.top + 30); };
+      faixa.addEventListener('pointermove', abrir);
+      faixa.addEventListener('pointerdown', abrir);
+      faixa.addEventListener('focus', () => abrir());
+      faixa.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') esconderDica(); });
+      faixa.addEventListener('blur', esconderDica);
+      svg.appendChild(g);
+    });
+    svg.appendChild(svgEl('line', { class: 'grade', x1: mE, x2: W - mD, y1: mT + ph, y2: mT + ph, stroke: '#d4d4cd' }));
+    el.innerHTML = ''; el.appendChild(svg);
+  };
+  desenhar();
+  (S.graficos ||= []).push(desenhar);
+}
+
+/* tabela com os mesmos números do gráfico (para ler sem passar o dedo) */
+function tabelaGrafico(cab, linhas) {
+  return `<div class="tab-graf" hidden><table><thead><tr>${cab.map((c, i) => `<th class="${i ? 'dir' : ''}">${esc(c)}</th>`).join('')}</tr></thead>
+    <tbody>${linhas.map((l) => `<tr>${l.map((c, i) => `<td class="${i ? 'dir num' : ''}">${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+function ligarTabelas(raiz) {
+  $$('[data-tab]', raiz).forEach((b) => b.onclick = () => {
+    const t = $('.tab-graf', b.closest('.card'));
+    t.hidden = !t.hidden; b.textContent = t.hidden ? 'Ver em tabela' : 'Esconder tabela';
+  });
+}
+
+/* 1. serviços feitos x dinheiro recebido */
+function cardMovimento(mov, { compacto = false } = {}) {
+  const series = [
+    { nome: 'Serviços feitos', cor: COR.amarelo, valores: mov.map((m) => m.servicos) },
+    { nome: 'Dinheiro recebido', cor: COR.azul, valores: mov.map((m) => m.recebido) },
+  ];
+  const vazio = !mov.some((m) => m.servicos || m.recebido);
+  const html = `<div class="card">
+    <div class="card-h"><div><h3>Serviços feitos x dinheiro recebido</h3><div class="muted small">Por mês. O recebido conta o dia em que o dinheiro entrou.</div></div>
+      ${compacto ? '<a class="btn sm" href="#/relatorios">Relatórios</a>' : '<button class="btn-tab" data-tab>Ver em tabela</button>'}</div>
+    <div class="card-b">${vazio ? '<div class="vazio" style="padding:20px"><b>Ainda sem movimento</b>O gráfico aparece conforme vocês lançam serviços e recebem pagamentos.</div>'
+      : `${legendaHTML(series)}<div class="graf" data-graf="mov"></div>
+      ${tabelaGrafico(['Mês', 'Serviços feitos', 'Dinheiro recebido'], mov.map((m) => [esc(nomeMesCurto(m.competencia)), brl(m.servicos), brl(m.recebido)]))}`}</div></div>`;
+  const ligar = (raiz) => {
+    const el = $('[data-graf=mov]', raiz); if (!el) return;
+    graficoColunas(el, { series, altura: compacto ? 190 : 240,
+      categorias: mov.map((m, i) => ({ rotulo: rotuloMes(m.competencia, i === 0 || m.competencia.endsWith('-01')), titulo: nomeMesCurto(m.competencia) })),
+      rodapeDica: (i) => { const d = mov[i].recebido - mov[i].servicos; return `<div class="lin" style="margin-top:5px;border-top:1px solid #333;padding-top:5px"><span>Diferença</span><b style="display:inline;margin:0">${d >= 0 ? '+' : '-'}${brl(Math.abs(d))}</b></div>`; } });
+  };
+  return { html, ligar };
+}
+
+/* ================================== relatórios ================================== */
+async function vRelatorios(view, params) {
+  const meses = params.get('meses') === '6' ? 6 : 12;
+  const d = await api(`/relatorios?meses=${meses}`);
+  const mov = cardMovimento(d.movimento);
+  const totServ = d.movimento.reduce((a, m) => a + m.servicos, 0);
+  const totRec = d.movimento.reduce((a, m) => a + m.recebido, 0);
+  const pagoTot = d.pontualidade.reduce((a, p) => a + p.no_prazo + p.atrasado, 0);
+  const pagoPrazo = d.pontualidade.reduce((a, p) => a + p.no_prazo, 0);
+  const totIdade = d.idade.reduce((a, f) => a + f.valor, 0);
+  const pontSeries = [
+    { nome: 'Pago no prazo', cor: COR.azul, valores: d.pontualidade.map((p) => p.no_prazo) },
+    { nome: 'Pago com atraso', cor: COR.amarelo, valores: d.pontualidade.map((p) => p.atrasado) },
+    { nome: 'Ainda em aberto', cor: COR.vermelho, valores: d.pontualidade.map((p) => p.em_aberto) },
+  ];
+  const maxDev = Math.max(1, ...d.devedores.map((c) => c.total));
+  const pct = (v, t) => (t ? Math.round((v / t) * 100) : 0);
+
+  view.innerHTML = topo('Relatórios', `Últimos ${meses} meses, até ${dataBR(d.hoje)}`) + `
+  <div class="filtros" style="padding:0 0 16px;border:0"><div class="chips">
+    <button class="chip ${meses === 6 ? 'ativo' : ''}" data-m="6">6 meses</button><button class="chip ${meses === 12 ? 'ativo' : ''}" data-m="12">12 meses</button></div></div>
+  <div class="grid g-3">
+    <div class="card kpi"><div class="rot">Serviços feitos</div><div class="val">${brl(totServ)}</div><div class="det">Soma dos últimos ${meses} meses</div></div>
+    <div class="card kpi destaque"><div class="rot">Dinheiro recebido</div><div class="val">${brl(totRec)}</div><div class="det">${totServ ? `${pct(totRec, totServ)}% do que foi feito no período` : 'Nenhum serviço no período'}</div></div>
+    <div class="card kpi"><div class="rot">Pagos dentro do prazo</div><div class="val">${pagoTot ? pct(pagoPrazo, pagoTot) + '%' : 'Sem dados'}</div><div class="det">Do que já foi pago, quanto veio até o dia ${S.config.dia_fim}</div></div>
+  </div>
+  <div class="sep"></div>
+  ${mov.html}
+  <div class="sep"></div>
+  <div class="grid g-2" style="align-items:start">
+    <div class="card">
+      <div class="card-h"><div><h3>Idade da dívida</h3><div class="muted small">Tudo que está em aberto, pelo tempo de atraso</div></div></div>
+      <div class="card-b">${totIdade ? `
+        <div class="segbar" role="img" aria-label="${esc(d.idade.map((f) => `${f.nome}: ${brl(f.valor)}`).join(', '))}">${d.idade.map((f, i) => f.valor ? `<div style="flex:${f.valor} 1 0;background:${COR_IDADE[i]};color:${i >= 2 ? '#fff' : '#111'}" title="${esc(f.nome)}: ${brl(f.valor)}">${(f.valor / totIdade) >= 0.12 ? pct(f.valor, totIdade) + '%' : ''}</div>` : '').join('')}</div>
+        <table><thead><tr><th>Faixa</th><th class="dir">Valor</th><th class="dir">Clientes</th></tr></thead><tbody>
+        ${d.idade.map((f, i) => `<tr><td><span style="display:inline-flex;gap:8px;align-items:center"><i style="width:10px;height:10px;border-radius:3px;background:${COR_IDADE[i]};display:inline-block"></i>${esc(f.nome)}</span></td><td class="dir num"><b>${brl(f.valor)}</b> <span class="muted small">${pct(f.valor, totIdade)}%</span></td><td class="dir num">${f.clientes}</td></tr>`).join('')}
+        </tbody></table>` : '<div class="vazio" style="padding:20px"><b>Ninguém devendo</b>Quando houver valores em aberto, eles aparecem aqui separados por tempo de atraso.</div>'}</div>
+    </div>
+    <div class="card">
+      <div class="card-h"><div><h3>Quem mais deve</h3><div class="muted small">Os 10 maiores saldos em aberto</div></div><a class="btn sm" href="#/cobrar?f=todos">A cobrar</a></div>
+      <div class="card-b">${d.devedores.length ? `<ul class="hbar">${d.devedores.map((c) => `<li><a href="#/clientes/${c.cliente_id}">
+          <span class="hbar-nome">${esc(c.cliente_nome)}<small>${c.vencido ? `${brl(c.vencido)} vencido` : 'Nada vencido'}</small></span>
+          <span class="hbar-trilho"><span class="hbar-barra" style="width:${(c.total / maxDev) * 100}%;background:${COR.vermelho}"></span></span>
+          <span class="hbar-val">${brl(c.total)}</span></a></li>`).join('')}</ul>`
+        : '<div class="vazio" style="padding:20px"><b>Ninguém devendo</b>Todas as contas estão pagas.</div>'}</div>
+    </div>
+  </div>
+  <div class="sep"></div>
+  <div class="card">
+    <div class="card-h"><div><h3>Pontualidade dos pagamentos</h3><div class="muted small">De cada mês de serviços: quanto foi pago até o dia ${S.config.dia_fim} do mês seguinte, quanto foi pago depois e quanto ainda falta</div></div><button class="btn-tab" data-tab>Ver em tabela</button></div>
+    <div class="card-b">${d.pontualidade.some((p) => p.total) ? `${legendaHTML(pontSeries)}<div class="graf" data-graf="pont"></div>
+      ${tabelaGrafico(['Mês dos serviços', 'Pago no prazo', 'Pago com atraso', 'Ainda em aberto'], d.pontualidade.map((p) => [esc(nomeMesCurto(p.competencia)), brl(p.no_prazo), brl(p.atrasado), brl(p.em_aberto)]))}`
+      : '<div class="vazio" style="padding:20px"><b>Ainda sem meses fechados</b>O gráfico aparece quando houver serviços de meses anteriores.</div>'}</div>
+  </div>`;
+
+  mov.ligar(view);
+  const ep = $('[data-graf=pont]', view);
+  if (ep) graficoColunas(ep, { series: pontSeries, empilhado: true,
+    categorias: d.pontualidade.map((p, i) => ({ rotulo: rotuloMes(p.competencia, i === 0 || p.competencia.endsWith('-01')), titulo: `Serviços de ${nomeMesCurto(p.competencia)}` })),
+    rodapeDica: (i) => { const p = d.pontualidade[i]; return p.total ? `<div class="lin" style="margin-top:5px;border-top:1px solid #333;padding-top:5px"><span>No prazo</span><b style="display:inline;margin:0">${pct(p.no_prazo, p.total)}%</b></div>` : ''; } });
+  ligarTabelas(view);
+  $$('[data-m]', view).forEach((b) => b.onclick = () => (location.hash = '#/relatorios?meses=' + b.dataset.m));
+}
+
+/* ================================ instalar o app ================================ */
+let pedidoInstalar = null;
+const estaInstalado = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const ehIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); pedidoInstalar = e; if (rotaAtual().partes[0] === 'painel' || rotaAtual().partes[0] === 'config') render(); });
+window.addEventListener('appinstalled', () => { pedidoInstalar = null; toast('App instalado. Agora é só abrir pela tela inicial.'); });
+if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+
+async function instalarApp() {
+  if (pedidoInstalar) {
+    pedidoInstalar.prompt();
+    await pedidoInstalar.userChoice.catch(() => {});
+    pedidoInstalar = null;
+    return;
+  }
+  abrirModal({ titulo: 'Instalar o app', corpo: ehIOS()
+    ? `<ol style="margin:0;padding-left:20px;line-height:1.8"><li>Abra este endereço no <b>Safari</b>.</li><li>Toque no botão <b>Compartilhar</b> (o quadrado com a seta para cima).</li><li>Escolha <b>Adicionar à Tela de Início</b> e toque em <b>Adicionar</b>.</li></ol>`
+    : `<ol style="margin:0;padding-left:20px;line-height:1.8"><li>Abra este endereço no <b>Chrome</b>.</li><li>Toque nos <b>três pontinhos</b> no canto de cima.</li><li>Escolha <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.</li></ol>`,
+    rodape: '<button class="btn pri" data-fechar>Entendi</button>' });
+}
+/* faixa no painel, só no celular/tablet, até instalar ou dispensar */
+function faixaInstalar() {
+  if (estaInstalado() || localStorage.getItem('instalar_dispensado') === '1') return '';
+  if (!pedidoInstalar && !(ehIOS() || matchMedia('(max-width:1100px)').matches)) return '';
+  return `<div class="instalar"><img src="/icone-192.png" alt=""><div><b>Instale a carteira no celular ou tablet</b>Abre direto da tela inicial, como um aplicativo.</div>
+    <button class="btn pri sm" data-instalar>Instalar</button><button class="icon-btn" data-dispensar aria-label="Dispensar">${I.x}</button></div>`;
+}
+function ligarFaixaInstalar(raiz) {
+  const b = $('[data-instalar]', raiz); if (b) b.onclick = instalarApp;
+  const x = $('[data-dispensar]', raiz); if (x) x.onclick = () => { localStorage.setItem('instalar_dispensado', '1'); x.closest('.instalar').remove(); };
+}
+
 /* ================================== ajustes ================================== */
 async function vConfig(view) {
   const cfg = await api('/config');
@@ -1269,7 +1569,11 @@ async function vConfig(view) {
   </div>
   ${admin ? `<div class="sep"></div><div class="card"><div class="card-h"><h3>Equipe com acesso</h3><button class="btn sm" id="b-novo-u">${I.mais} Adicionar pessoa</button></div><div id="usuarios"></div></div>` : ''}
   <div class="sep"></div>
+  <div class="card"><div class="card-h"><div><h3>App no celular e no tablet</h3><div class="muted small">${estaInstalado() ? 'Você já está usando o app instalado.' : 'Instale para abrir direto da tela inicial, sem precisar do navegador.'}</div></div>
+    ${estaInstalado() ? '<span class="tag st-paga">Instalado</span>' : `<button class="btn pri sm" id="b-instalar">Instalar app</button>`}</div></div>
+  <div class="sep"></div>
   <button class="btn" id="b-sair2" style="display:none">Sair da conta</button>`;
+  const bi = $('#b-instalar'); if (bi) bi.onclick = instalarApp;
 
   if (admin) {
     $('#f-cfg').addEventListener('submit', async (e) => {

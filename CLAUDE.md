@@ -24,7 +24,7 @@ Sistema web para uma oficina mecânica controlar o que cada cliente deve. A equi
 - Cloudflare Worker (`src/index.js`) servindo a API em `/api/*`
 - Banco Cloudflare D1, binding `DB`, banco `carteira-oficina` (o ID já está no `wrangler.toml`)
 - Frontend em um único arquivo `public/index.html` (HTML, CSS e JS puros, sem framework e sem build), servido como static assets pelo binding `ASSETS`
-- Rotas do frontend por hash: `#/painel`, `#/lancar`, `#/servicos`, `#/cobrar`, `#/cobrancas`, `#/fatura/:clienteId/:competencia`, `#/clientes`, `#/clientes/:id`, `#/config`
+- Rotas do frontend por hash: `#/painel`, `#/lancar`, `#/servicos`, `#/cobrar`, `#/relatorios`, `#/cobrancas`, `#/fatura/:clienteId/:competencia`, `#/clientes`, `#/clientes/:id`, `#/config`
 - Sem dependências em runtime. Só o `wrangler` como devDependency.
 
 ## Estrutura
@@ -34,7 +34,9 @@ src/index.js                  API: auth, clientes, serviços, faturas, pagamento
 public/index.html             Todas as telas
 migrations/0001_inicial.sql   Schema do banco
 migrations/0002_anotacoes.sql Anotações de cobrança e promessas de pagamento
-public/logo.png, icone.png    Logo da oficina (fundo transparente) e ícone da aba
+public/logo.png, icone*.png   Logo da oficina (fundo transparente) e ícones do app (192, 512, maskable)
+public/manifest.webmanifest   Web app instalável (nome, cores, ícones)
+public/sw.js                  Service worker: guarda só a casca (tela, logo, ícones). Nunca guarda /api
 wrangler.toml                 Config do Worker e do D1
 LEIA-ME.md                    Guia para o usuário final
 ```
@@ -79,6 +81,9 @@ npm run backup    # exporta o banco de produção para backup.sql
 - Formatação de dinheiro no front com `brl(centavos)`. Campos de valor usam `mascaraDinheiro()`.
 - Visual: preto (`--side`) e amarelo da logo (`--accent: #f8d200`). Amarelo só como fundo com texto preto, nunca texto amarelo em fundo branco.
 - A chave Pix da tabela `config` só aparece na fatura impressa.
+- Relatórios (`GET /api/relatorios?meses=6|12`): serviços feitos x dinheiro recebido por mês (recebido pela `data_pagamento`), idade da dívida em faixas, top 10 devedores e pontualidade (pago até o `dia_fim` do mês seguinte, pago depois, em aberto) só de meses fechados.
+- Gráficos são SVG feitos à mão em `graficoColunas()`, sem biblioteca. Cores validadas para daltonismo: azul `#2a78d6`, amarelo `#eda100`, vermelho `#e34948` e a escala de vermelhos `COR_IDADE`. Todo gráfico tem legenda, dica ao passar o mouse ou tocar e "Ver em tabela".
+- Web app: ao mudar arquivos da casca de forma que o cache antigo atrapalhe, suba a `VERSAO` em `public/sw.js`.
 
 ## Testar antes de entregar
 

@@ -34,6 +34,8 @@ No painel da Cloudflare: Workers e Pages > carteira-oficina > Settings > Domains
 - **Receber:** o cliente paga quanto puder. O valor abate primeiro os meses mais antigos e o resto fica em aberto para depois.
 - **Anotar cobrança:** registra o que foi conversado e, se quiser, o dia e o valor que o cliente prometeu pagar. O painel avisa as promessas de hoje e as não cumpridas.
 - **Fatura do cliente:** detalhe do mês, botão para ligar e botão de imprimir.
+- **Relatórios:** gráficos de serviços feitos x dinheiro recebido, idade da dívida, quem mais deve e pontualidade dos pagamentos, nos últimos 6 ou 12 meses. Toque numa barra para ver o valor ou use "Ver em tabela".
+- **App no celular e tablet:** no Android, abra no Chrome e toque em Instalar (aparece no Painel e em Ajustes). No iPhone ou iPad, abra no Safari, toque em Compartilhar e depois em Adicionar à Tela de Início.
 - **Situações:** Mês corrente (ainda acumulando), A vencer, Vence agora (dentro do dia 5 a 10), Vencida, Paga.
 - **Acesso:** login com usuário e senha. Administrador mexe em Ajustes e na equipe; o restante da equipe lança serviços e recebe pagamentos.
 
