@@ -67,6 +67,10 @@ const hex = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart
 const b64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
 const deB64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
 
+const fmtBRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+const brl = (c) => fmtBRL.format((c || 0) / 100);
+const diasEntre = (de, ate) => Math.round((Date.parse(ate + 'T12:00:00Z') - Date.parse(de + 'T12:00:00Z')) / 86400000);
+
 function hojeLocal() {
   // AAAA-MM-DD no fuso da oficina
   return new Intl.DateTimeFormat('en-CA', { timeZone: FUSO, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
@@ -251,9 +255,15 @@ async function rotear(request, env, url) {
       if (metodo === 'GET') return painel(env);
       break;
 
+    case 'carteira':
+      if (metodo === 'GET') return carteira(env);
+      break;
+
     case 'clientes':
       if (metodo === 'GET' && !id) return listarClientes(env, url);
       if (metodo === 'POST' && !id) return criarCliente(request, env);
+      if (metodo === 'POST' && id && sub === 'receber') return receberDivida(request, env, eu, Number(id));
+      if (metodo === 'POST' && id && sub === 'anotacoes') return criarAnotacao(request, env, eu, Number(id));
       if (metodo === 'GET' && id) return detalheCliente(env, Number(id));
       if (metodo === 'PUT' && id) return editarCliente(request, env, Number(id));
       if (metodo === 'DELETE' && id) return excluirCliente(env, Number(id));
@@ -274,6 +284,10 @@ async function rotear(request, env, url) {
     case 'pagamentos':
       if (metodo === 'POST' && !id) return criarPagamento(request, env, eu);
       if (metodo === 'DELETE' && id) return excluirPagamento(env, Number(id));
+      break;
+
+    case 'anotacoes':
+      if (metodo === 'DELETE' && id) return excluirAnotacao(env, Number(id));
       break;
 
     case 'usuarios':
@@ -442,6 +456,10 @@ async function painel(env) {
   const compAtual = competenciaDe(hoje);
   const compCobranca = mesAnterior(compAtual);
   const faturas = await buscarFaturas(env, { cfg });
+  const { clientes: devedores } = await montarCarteira(env, faturas, hoje);
+  const promessas = devedores
+    .filter((c) => c.promessa && (c.promessa.situacao === 'hoje' || c.promessa.situacao === 'vencida'))
+    .sort((a, b) => a.promessa.promessa_data.localeCompare(b.promessa.promessa_data));
 
   const somar = (lista, campo) => lista.reduce((a, f) => a + Math.max(f[campo], 0), 0);
   const doMes = faturas.filter((f) => f.competencia === compAtual);
@@ -473,8 +491,133 @@ async function painel(env) {
     },
     vencidas: { total: somar(vencidas, 'saldo'), quantidade: vencidas.length, lista: vencidas.slice(0, 12) },
     recebido_no_mes: recebido.v,
+    promessas: promessas.slice(0, 12),
     ultimos_servicos: ultimos.results,
   });
+}
+
+/* ---------------------------------------------------------------- carteira */
+
+// Situação de uma promessa de pagamento. Considera cumprida quando, depois da
+// anotação, o cliente pagou o valor prometido (ou qualquer valor, se não houver).
+function situacaoPromessa(a, hoje) {
+  if (!a || !a.promessa_data) return null;
+  if (a.pago_desde >= (a.promessa_centavos || 1)) return 'cumprida';
+  if (a.promessa_data < hoje) return 'vencida';
+  if (a.promessa_data === hoje) return 'hoje';
+  return 'futura';
+}
+
+const SQL_ANOTACOES = `
+  SELECT a.*, u.nome AS autor,
+    COALESCE((SELECT SUM(p.valor_centavos) FROM pagamentos p
+              WHERE p.cliente_id = a.cliente_id AND p.criado_em > a.criado_em), 0) AS pago_desde
+  FROM anotacoes a LEFT JOIN usuarios u ON u.id = a.criado_por
+`;
+
+// Agrupa as faturas com saldo por cliente: quanto deve no total, quanto já venceu,
+// há quantos dias, última anotação e última promessa de pagamento.
+async function montarCarteira(env, faturas, hoje) {
+  const por = new Map();
+  for (const f of faturas) {
+    if (f.saldo <= 0) continue;
+    let c = por.get(f.cliente_id);
+    if (!c) {
+      c = {
+        cliente_id: f.cliente_id, cliente_nome: f.cliente_nome, cliente_telefone: f.cliente_telefone,
+        total: 0, vencido: 0, no_prazo: 0, a_vencer: 0, mes_atual: 0, atraso_dias: 0, meses: [],
+        ultima: null, promessa: null,
+      };
+      por.set(f.cliente_id, c);
+    }
+    c.total += f.saldo;
+    if (f.status === 'vencida') {
+      c.vencido += f.saldo;
+      c.atraso_dias = Math.max(c.atraso_dias, diasEntre(f.fim, hoje));
+    } else if (f.status === 'no_prazo') c.no_prazo += f.saldo;
+    else if (f.status === 'a_vencer') c.a_vencer += f.saldo;
+    else c.mes_atual += f.saldo;
+    c.meses.push({ competencia: f.competencia, saldo: f.saldo, status: f.status, inicio: f.inicio, fim: f.fim });
+  }
+  const [ultimas, promessas] = await Promise.all([
+    env.DB.prepare(SQL_ANOTACOES + ' WHERE a.id IN (SELECT MAX(id) FROM anotacoes GROUP BY cliente_id)').all(),
+    env.DB.prepare(SQL_ANOTACOES + ' WHERE a.id IN (SELECT MAX(id) FROM anotacoes WHERE promessa_data IS NOT NULL GROUP BY cliente_id)').all(),
+  ]);
+  for (const a of ultimas.results) { const c = por.get(a.cliente_id); if (c) c.ultima = a; }
+  for (const a of promessas.results) {
+    const c = por.get(a.cliente_id);
+    if (c) c.promessa = { ...a, situacao: situacaoPromessa(a, hoje) };
+  }
+  const clientes = [...por.values()];
+  for (const c of clientes) c.meses.sort((a, b) => a.competencia.localeCompare(b.competencia));
+  clientes.sort((a, b) => b.atraso_dias - a.atraso_dias || (b.vencido + b.no_prazo) - (a.vencido + a.no_prazo) || b.total - a.total);
+  return { clientes };
+}
+
+async function carteira(env) {
+  const cfg = await lerConfig(env);
+  const hoje = hojeLocal();
+  const { clientes } = await montarCarteira(env, await buscarFaturas(env, { cfg }), hoje);
+  const resumo = clientes.reduce((r, c) => {
+    r.total += c.total; r.vencido += c.vencido; r.no_prazo += c.no_prazo; r.futuro += c.a_vencer + c.mes_atual;
+    if (c.vencido > 0) r.clientes_vencidos += 1;
+    if (c.promessa?.situacao === 'hoje') r.promessas_hoje += 1;
+    if (c.promessa?.situacao === 'vencida') r.promessas_vencidas += 1;
+    return r;
+  }, { total: 0, vencido: 0, no_prazo: 0, futuro: 0, clientes: clientes.length, clientes_vencidos: 0, promessas_hoje: 0, promessas_vencidas: 0 });
+  return json({ hoje, clientes, resumo });
+}
+
+// Recebe um valor do cliente e abate das cobranças mais antigas primeiro.
+// Pode ser parcial: o que não for coberto continua em aberto.
+async function receberDivida(request, env, eu, clienteId) {
+  const b = await lerJson(request);
+  const cliente = await env.DB.prepare('SELECT id FROM clientes WHERE id = ?').bind(clienteId).first();
+  if (!cliente) falha(404, 'Cliente não encontrado.');
+  const valor = validarCentavos(b.valor_centavos, 'valor recebido');
+  const data = validarData(b.data_pagamento || hojeLocal(), 'data do pagamento');
+  const forma = texto(b.forma, 30);
+  const obs = texto(b.observacao, 300);
+  const abertas = (await buscarFaturas(env, { cliente_id: clienteId }))
+    .filter((f) => f.saldo > 0)
+    .sort((x, y) => x.competencia.localeCompare(y.competencia));
+  const divida = abertas.reduce((a, f) => a + f.saldo, 0);
+  if (!divida) falha(400, 'Este cliente não tem nada em aberto.');
+  if (valor > divida) falha(400, `O valor é maior que tudo o que o cliente deve (${brl(divida)}).`);
+
+  let resta = valor;
+  const aplicado = [];
+  for (const f of abertas) {
+    if (!resta) break;
+    const parte = Math.min(resta, f.saldo);
+    aplicado.push({ competencia: f.competencia, valor: parte, quitou: parte === f.saldo });
+    resta -= parte;
+  }
+  const stmt = env.DB.prepare(
+    'INSERT INTO pagamentos (cliente_id, competencia, valor_centavos, data_pagamento, forma, observacao, criado_por) VALUES (?, ?, ?, ?, ?, ?, ?)'
+  );
+  await env.DB.batch(aplicado.map((x) => stmt.bind(clienteId, x.competencia, x.valor, data, forma, obs, eu.id)));
+  return json({ aplicado, restante: divida - valor }, 201);
+}
+
+async function criarAnotacao(request, env, eu, clienteId) {
+  const b = await lerJson(request);
+  const cliente = await env.DB.prepare('SELECT id FROM clientes WHERE id = ?').bind(clienteId).first();
+  if (!cliente) falha(404, 'Cliente não encontrado.');
+  const t = texto(b.texto, 1000);
+  const data = b.promessa_data ? validarData(b.promessa_data, 'data prometida') : null;
+  const valor = b.promessa_centavos ? validarCentavos(b.promessa_centavos, 'valor prometido') : null;
+  if (valor && !data) falha(400, 'Informe o dia em que o cliente prometeu pagar.');
+  if (!t && !data) falha(400, 'Escreva a anotação ou informe o dia em que o cliente prometeu pagar.');
+  await env.DB.prepare('INSERT INTO anotacoes (cliente_id, texto, promessa_data, promessa_centavos, criado_por) VALUES (?, ?, ?, ?, ?)')
+    .bind(clienteId, t || '', data, valor, eu.id).run();
+  return json({ ok: true }, 201);
+}
+
+async function excluirAnotacao(env, id) {
+  const r = await env.DB.prepare('DELETE FROM anotacoes WHERE id = ?').bind(id).run();
+  if (!r.meta.changes) falha(404, 'Anotação não encontrada.');
+  return json({ ok: true });
 }
 
 /* ---------------------------------------------------------------- clientes */
@@ -525,10 +668,12 @@ async function criarCliente(request, env) {
 async function detalheCliente(env, id) {
   const cliente = await env.DB.prepare('SELECT * FROM clientes WHERE id = ?').bind(id).first();
   if (!cliente) falha(404, 'Cliente não encontrado.');
-  const [faturas, servicos, pagamentos] = await Promise.all([
+  const hoje = hojeLocal();
+  const [faturas, servicos, pagamentos, anotacoes] = await Promise.all([
     buscarFaturas(env, { cliente_id: id }),
     env.DB.prepare('SELECT * FROM servicos WHERE cliente_id = ? ORDER BY data_servico DESC, id DESC').bind(id).all(),
     env.DB.prepare('SELECT * FROM pagamentos WHERE cliente_id = ? ORDER BY data_pagamento DESC, id DESC').bind(id).all(),
+    env.DB.prepare(SQL_ANOTACOES + ' WHERE a.cliente_id = ? ORDER BY a.id DESC LIMIT 200').bind(id).all(),
   ]);
   const porComp = (lista) => lista.reduce((a, x) => ((a[x.competencia] ||= []).push(x), a), {});
   const sv = porComp(servicos.results);
@@ -537,6 +682,8 @@ async function detalheCliente(env, id) {
     cliente,
     faturas: faturas.map((f) => ({ ...f, servicos: sv[f.competencia] || [], pagamentos: pg[f.competencia] || [] })),
     saldo_total: faturas.reduce((a, f) => a + Math.max(f.saldo, 0), 0),
+    anotacoes: anotacoes.results.map((a) => ({ ...a, situacao: situacaoPromessa(a, hoje) })),
+    hoje,
   });
 }
 
@@ -555,7 +702,10 @@ async function excluirCliente(env, id) {
     'SELECT (SELECT COUNT(*) FROM servicos WHERE cliente_id = ?) + (SELECT COUNT(*) FROM pagamentos WHERE cliente_id = ?) AS n'
   ).bind(id, id).first();
   if (usos.n > 0) falha(409, 'Este cliente tem serviços ou pagamentos. Em vez de excluir, marque como inativo.');
-  const r = await env.DB.prepare('DELETE FROM clientes WHERE id = ?').bind(id).run();
+  const [, r] = await env.DB.batch([
+    env.DB.prepare('DELETE FROM anotacoes WHERE cliente_id = ?').bind(id),
+    env.DB.prepare('DELETE FROM clientes WHERE id = ?').bind(id),
+  ]);
   if (!r.meta.changes) falha(404, 'Cliente não encontrado.');
   return json({ ok: true });
 }

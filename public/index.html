@@ -4,19 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#14171c">
+<meta name="theme-color" content="#0b0b0b">
 <title>Carteira de Clientes</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314171c'/%3E%3Cpath d='M18 22h28a4 4 0 0 1 4 4v18a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4V26a4 4 0 0 1 4-4Z' fill='none' stroke='%23f5a524' stroke-width='4'/%3E%3Cpath d='M14 31h36' stroke='%23f5a524' stroke-width='4'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="/icone.png">
+<link rel="icon" type="image/png" href="/icone.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f4f5f7; --card:#fff; --ink:#14171c; --ink-2:#4a5160; --ink-3:#8a91a0; --line:#e4e6eb; --line-2:#eef0f3;
-  --side:#14171c; --side-ink:#c9ced8; --accent:#f5a524; --accent-ink:#1a1206; --accent-soft:#fff4e0;
+  --bg:#f4f4f1; --card:#fff; --ink:#111111; --ink-2:#4a4a46; --ink-3:#8b8b85; --line:#e3e3de; --line-2:#efefeb;
+  --side:#0b0b0b; --side-ink:#c4c4bd; --accent:#f8d200; --accent-2:#ffdf2e; --accent-ink:#111111; --accent-soft:#fff8d2;
   --blue:#2563eb; --blue-soft:#e8efff; --green:#15803d; --green-soft:#e6f6ec; --red:#c62828; --red-soft:#fdecec;
   --amber:#b45309; --amber-soft:#fff3dc; --gray-soft:#eef0f3;
-  --radius:12px; --shadow:0 1px 2px rgba(20,23,28,.05),0 4px 16px rgba(20,23,28,.04);
+  --radius:12px; --shadow:0 1px 2px rgba(17,17,17,.05),0 4px 16px rgba(17,17,17,.04);
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
@@ -29,37 +30,36 @@ a{color:inherit}
 .small{font-size:12.5px}
 
 /* ---------- auth ---------- */
-#auth{min-height:100%;display:grid;place-items:center;padding:24px;background:radial-gradient(1200px 600px at 20% -10%,#2a2f38 0,#14171c 60%)}
-.auth-card{width:100%;max-width:380px;background:var(--card);border-radius:16px;padding:32px 28px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
-.auth-card h1{font-size:20px;margin:14px 0 4px}
+#auth{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:24px;background:radial-gradient(900px 500px at 50% -10%,rgba(248,210,0,.16) 0,transparent 60%),#0b0b0b}
+.auth-logo{width:230px;max-width:70vw;height:auto;display:block}
+.auth-card{width:100%;max-width:380px;background:var(--card);border-radius:16px;padding:28px 28px 30px;box-shadow:0 20px 60px rgba(0,0,0,.5);border-top:4px solid var(--accent)}
+.auth-card h1{font-size:20px;margin:0 0 4px}
 .auth-card p{margin:0 0 22px;color:var(--ink-2)}
-.logo{width:44px;height:44px;border-radius:12px;background:var(--side);display:grid;place-items:center}
-.logo svg{width:24px;height:24px}
 
 /* ---------- layout ---------- */
 #app{display:grid;grid-template-columns:232px 1fr;min-height:100%}
 .sidebar{background:var(--side);color:var(--side-ink);display:flex;flex-direction:column;padding:18px 12px;position:sticky;top:0;height:100vh}
-.brand{display:flex;gap:10px;align-items:center;padding:4px 8px 20px}
-.brand .logo{width:36px;height:36px;border-radius:10px;background:#22262e}
-.brand b{display:block;color:#fff;font-size:14px;line-height:1.2}
-.brand span{font-size:12px;color:#8a91a0}
+.brand{padding:6px 8px 22px}
+.brand img{display:block;width:100%;max-width:186px;height:auto}
+.brand span{display:block;margin-top:10px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#77776f}
 .nav{display:flex;flex-direction:column;gap:2px}
 .nav a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;text-decoration:none;color:var(--side-ink);font-weight:500}
 .nav a svg{width:18px;height:18px;flex:none;opacity:.8}
-.nav a:hover{background:#1f232a;color:#fff}
-.nav a.ativo{background:#262b33;color:#fff}
+.nav a:hover{background:#1a1a1a;color:#fff}
+.nav a.ativo{background:#1d1d1d;color:#fff;box-shadow:inset 3px 0 0 var(--accent)}
 .nav a.ativo svg{color:var(--accent);opacity:1}
 .nav a.cta{background:var(--accent);color:var(--accent-ink);margin-bottom:10px;justify-content:center}
 .nav a.cta svg{opacity:1}
-.nav a.cta:hover,.nav a.cta.ativo{filter:brightness(1.05);background:var(--accent);color:var(--accent-ink)}
+.nav a.cta:hover,.nav a.cta.ativo{background:var(--accent-2);color:var(--accent-ink);box-shadow:none}
+.nav .badge{margin-left:auto;background:#d32f2f;color:#fff;border-radius:999px;font-size:11px;font-weight:700;min-width:20px;height:20px;padding:0 6px;display:inline-grid;place-items:center}
 .nav a.cta.ativo svg{color:var(--accent-ink)}
-.side-foot{margin-top:auto;border-top:1px solid #262b33;padding:12px 8px 0;font-size:12.5px}
+.side-foot{margin-top:auto;border-top:1px solid #222;padding:12px 8px 0;font-size:12.5px}
 .side-foot b{color:#fff;display:block;font-weight:600}
 .side-foot button{margin-top:8px;background:none;border:0;color:#8a91a0;cursor:pointer;padding:0}
 .side-foot button:hover{color:#fff}
 main{min-width:0;padding:28px 32px 60px}
 .topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
-.topbar h2{margin:0;font-size:22px;letter-spacing:-.01em}
+.topbar h2{margin:0;font-size:23px;letter-spacing:-.02em;font-weight:700}
 .topbar .sub{color:var(--ink-3);margin-top:2px}
 .acoes{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
@@ -77,20 +77,20 @@ main{min-width:0;padding:28px 32px 60px}
 .kpi .rot{color:var(--ink-2);font-size:12.5px;font-weight:500;display:flex;align-items:center;gap:6px}
 .kpi .val{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:6px 0 2px}
 .kpi .det{color:var(--ink-3);font-size:12.5px}
-.kpi.destaque{background:var(--side);color:#fff;border-color:var(--side)}
-.kpi.destaque .rot,.kpi.destaque .det{color:#a9b0bd}
+.kpi.destaque{background:var(--side);color:#fff;border-color:var(--side);position:relative;overflow:hidden}
+.kpi.destaque::after{content:"";position:absolute;right:-30px;top:-30px;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,rgba(248,210,0,.22),transparent 70%)}
+.kpi.destaque .rot,.kpi.destaque .det{color:#a8a8a0}
 .kpi.destaque .val{color:var(--accent)}
 .kpi.alerta .val{color:var(--red)}
+.kpi.alerta{border-left:4px solid var(--red)}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:38px;padding:0 14px;border-radius:9px;border:1px solid var(--line);background:#fff;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background .15s,border-color .15s}
-.btn:hover{background:#f7f8fa;border-color:#d6d9e0}
+.btn:hover{background:#f7f7f4;border-color:#d4d4cd}
 .btn svg{width:16px;height:16px}
 .btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.btn.pri:hover{filter:brightness(1.04)}
+.btn.pri:hover{background:var(--accent-2);border-color:var(--accent-2)}
 .btn.esc{background:var(--ink);border-color:var(--ink);color:#fff}
-.btn.esc:hover{background:#262b33}
-.btn.zap{background:#1fa855;border-color:#1fa855;color:#fff}
-.btn.zap:hover{background:#1b9a4d}
+.btn.esc:hover{background:#2a2a2a}
 .btn.perigo{color:var(--red)}
 .btn.sm{height:30px;padding:0 10px;font-size:12.5px;border-radius:7px}
 .btn.bloco{width:100%}
@@ -103,25 +103,25 @@ main{min-width:0;padding:28px 32px 60px}
 .campo label{font-weight:600;font-size:12.5px;color:var(--ink-2)}
 .input,select.input,textarea.input{height:40px;border:1px solid var(--line);border-radius:9px;padding:0 12px;background:#fff;width:100%;outline:none;transition:border-color .15s,box-shadow .15s}
 textarea.input{height:auto;min-height:84px;padding:10px 12px;resize:vertical}
-.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,165,36,.18)}
+.input:focus{border-color:#d9b800;box-shadow:0 0 0 3px rgba(248,210,0,.3)}
 .input.grande{height:48px;font-size:18px;font-weight:700}
 .linha{display:grid;gap:12px;grid-template-columns:1fr 1fr}
 .erro{background:var(--red-soft);color:var(--red);padding:10px 12px;border-radius:9px;margin-bottom:14px;font-weight:500}
-.dica{background:var(--accent-soft);color:#7a4a00;border-radius:9px;padding:10px 12px;font-size:13px;display:flex;gap:8px;align-items:flex-start}
+.dica{background:var(--accent-soft);color:#5c4c00;border-radius:9px;padding:10px 12px;font-size:13px;display:flex;gap:8px;align-items:flex-start}
 .dica svg{width:16px;height:16px;flex:none;margin-top:1px}
 
 .tabela-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
-th{text-align:left;font-size:12px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap;background:#fafbfc}
+th{text-align:left;font-size:12px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap;background:#fafaf8}
 td{padding:11px 14px;border-bottom:1px solid var(--line-2);vertical-align:middle}
 tr:last-child td{border-bottom:0}
 tbody tr.clicavel{cursor:pointer}
-tbody tr.clicavel:hover td{background:#fafbfc}
+tbody tr.clicavel:hover td{background:#fffcea}
 td.dir,th.dir{text-align:right}
 td.acoes-td{text-align:right;white-space:nowrap}
 .vazio{padding:36px 18px;text-align:center;color:var(--ink-3)}
 .vazio b{display:block;color:var(--ink-2);margin-bottom:4px}
-tfoot td{font-weight:700;background:#fafbfc;border-top:1px solid var(--line)}
+tfoot td{font-weight:700;background:#fafaf8;border-top:1px solid var(--line)}
 
 .tag{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
 .tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
@@ -153,15 +153,15 @@ tfoot td{font-weight:700;background:#fafbfc;border-top:1px solid var(--line)}
 .ac-item:hover,.ac-item.foco{background:var(--gray-soft)}
 .ac-item .sub{color:var(--ink-3);font-size:12.5px}
 .ac-novo{color:var(--blue);font-weight:600}
-.cliente-escolhido{display:flex;align-items:center;justify-content:space-between;gap:10px;height:40px;border:1px solid var(--accent);background:var(--accent-soft);border-radius:9px;padding:0 6px 0 12px;font-weight:600}
+.cliente-escolhido{display:flex;align-items:center;justify-content:space-between;gap:10px;height:40px;border:1px solid #d9b800;background:var(--accent-soft);border-radius:9px;padding:0 6px 0 12px;font-weight:600}
 
 /* modal */
-.modal-fundo{position:fixed;inset:0;background:rgba(20,23,28,.45);display:grid;place-items:center;padding:16px;z-index:100;animation:fade .15s}
+.modal-fundo{position:fixed;inset:0;background:rgba(11,11,11,.55);display:grid;place-items:center;padding:16px;z-index:100;animation:fade .15s}
 .modal{background:#fff;border-radius:14px;width:100%;max-width:480px;max-height:calc(100vh - 32px);overflow:auto;box-shadow:0 24px 64px rgba(0,0,0,.25);animation:sobe .18s}
 .modal-h{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line-2)}
 .modal-h h3{margin:0;font-size:16px}
 .modal-b{padding:18px}
-.modal-f{display:flex;justify-content:flex-end;gap:8px;padding:14px 18px;border-top:1px solid var(--line-2);background:#fafbfc;border-radius:0 0 14px 14px}
+.modal-f{display:flex;justify-content:flex-end;gap:8px;padding:14px 18px;border-top:1px solid var(--line-2);background:#fafaf8;border-radius:0 0 14px 14px}
 @keyframes fade{from{opacity:0}}
 @keyframes sobe{from{transform:translateY(8px);opacity:0}}
 
@@ -175,6 +175,40 @@ tfoot td{font-weight:700;background:#fafbfc;border-top:1px solid var(--line)}
 .resumo-fatura span{display:block;color:var(--ink-3);font-size:12.5px}
 .resumo-fatura b{font-size:18px}
 .carregando{padding:40px;text-align:center;color:var(--ink-3)}
+
+/* carteira (a cobrar) */
+.dev{padding:16px 18px;border-bottom:1px solid var(--line-2);display:grid;gap:10px}
+.dev:last-child{border-bottom:0}
+.dev.atrasado{box-shadow:inset 4px 0 0 var(--red)}
+.dev-topo{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.dev-nome{font-weight:700;font-size:15.5px;text-decoration:none}
+.dev-nome:hover{text-decoration:underline}
+.dev-sub{color:var(--ink-3);font-size:12.5px;margin-top:2px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.dev-sub a{color:var(--ink-2);font-weight:600;text-decoration:none}
+.dev-valor{text-align:right}
+.dev-valor b{font-size:19px;letter-spacing:-.02em;display:block}
+.dev-valor .tag{margin-top:4px}
+.meses{display:flex;gap:6px;flex-wrap:wrap}
+.mes{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:12.5px;background:#fff;text-decoration:none}
+.mes b{font-weight:600}
+.mes.vencida{border-color:#f3c4c4;background:var(--red-soft);color:var(--red)}
+.mes.no_prazo{border-color:#f1d8a8;background:var(--amber-soft);color:var(--amber)}
+.nota{background:#fafaf8;border:1px solid var(--line-2);border-radius:9px;padding:9px 11px;font-size:13px;display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
+.nota .quem{color:var(--ink-3);font-size:12px}
+.nota .txt{white-space:pre-wrap;word-break:break-word}
+.dev-acoes{display:flex;gap:8px;flex-wrap:wrap}
+.st-prom-hoje{background:var(--amber-soft);color:var(--amber)}
+.st-prom-vencida{background:var(--red-soft);color:var(--red)}
+.st-prom-futura{background:var(--blue-soft);color:var(--blue)}
+.st-prom-cumprida{background:var(--green-soft);color:var(--green)}
+.divisao{list-style:none;margin:0 0 14px;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.divisao li{display:flex;justify-content:space-between;gap:10px;padding:9px 12px;border-bottom:1px solid var(--line-2);font-size:13px}
+.divisao li:last-child{border-bottom:0}
+.divisao li.quita{background:var(--green-soft)}
+.divisao li.parcial{background:var(--accent-soft)}
+.timeline{list-style:none;margin:0;padding:0}
+.timeline li{padding:12px 18px;border-bottom:1px solid var(--line-2);display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.timeline li:last-child{border-bottom:0}
 .sep{height:16px}
 .print-only{display:none}
 
@@ -182,7 +216,12 @@ tfoot td{font-weight:700;background:#fafbfc;border-top:1px solid var(--line)}
 @media (max-width:1100px){ .g-4{grid-template-columns:repeat(2,minmax(0,1fr))} .g-main{grid-template-columns:1fr} }
 @media (max-width:820px){
   #app{grid-template-columns:1fr}
-  .sidebar{position:fixed;bottom:0;top:auto;left:0;right:0;height:auto;flex-direction:row;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:50;border-top:1px solid #262b33}
+  .sidebar{position:fixed;bottom:0;top:auto;left:0;right:0;height:auto;flex-direction:row;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:50;border-top:2px solid var(--accent)}
+  .so-desktop{display:none!important}
+  .nav a.ativo{box-shadow:inset 0 3px 0 var(--accent)}
+  .nav .badge{position:absolute;top:2px;right:calc(50% - 22px);min-width:17px;height:17px;font-size:10px;padding:0 4px}
+  .nav a{position:relative}
+
   .brand,.side-foot{display:none}
   .nav{flex-direction:row;flex:1;justify-content:space-around}
   .nav a{flex-direction:column;gap:3px;font-size:10.5px;padding:6px 4px;flex:1;text-align:center}
@@ -196,7 +235,12 @@ tfoot td{font-weight:700;background:#fafbfc;border-top:1px solid var(--line)}
   .resumo-fatura div{border-right:0;border-bottom:1px solid var(--line-2)}
   .esconde-mobile{display:none}
   td,th{padding:10px}
+  .dev{padding:14px}
+  .dev-acoes .btn{flex:1}
 }
+.topo-mobile{display:none;align-items:center;justify-content:space-between;background:var(--side);margin:-18px -14px 16px;padding:12px 14px;border-bottom:2px solid var(--accent)}
+.topo-mobile img{height:34px;width:auto;display:block}
+@media (max-width:820px){ .topo-mobile{display:flex} }
 @media (max-width:480px){ .g-4{grid-template-columns:1fr 1fr} .kpi .val{font-size:19px} }
 
 @media print{
@@ -212,10 +256,10 @@ tfoot td{font-weight:700;background:#fafbfc;border-top:1px solid var(--line)}
 
 <!-- ======================= LOGIN / PRIMEIRO ACESSO ======================= -->
 <div id="auth" hidden>
+  <img class="auth-logo" src="/logo.png" alt="Logo da oficina">
   <div class="auth-card">
-    <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg></div>
     <form id="form-login">
-      <h1>Carteira de Clientes</h1>
+      <h1>Carteira de clientes</h1>
       <p>Entre com seu usuário e senha.</p>
       <div class="erro" id="login-erro" hidden></div>
       <div class="campo"><label for="l-usuario">Usuário</label><input class="input" id="l-usuario" autocomplete="username" autocapitalize="none" required></div>
@@ -239,16 +283,17 @@ tfoot td{font-weight:700;background:#fafbfc;border-top:1px solid var(--line)}
 <div id="app" hidden>
   <aside class="sidebar">
     <div class="brand">
-      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#f5a524" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg></div>
-      <div><b id="nome-oficina">Oficina</b><span>Carteira de clientes</span></div>
+      <img src="/logo.png" alt="" id="logo-oficina">
+      <span>Carteira de clientes</span>
     </div>
     <nav class="nav" id="nav">
       <a href="#/lancar" data-r="lancar" class="cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>Lançar<span class="lbl-longo"> serviço</span></span></a>
       <a href="#/painel" data-r="painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Painel</span></a>
+      <a href="#/cobrar" data-r="cobrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1 0-4h12v4"/><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg><span>A cobrar</span><b class="badge" id="badge-cobrar" hidden></b></a>
       <a href="#/cobrancas" data-r="cobrancas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Cobranças</span></a>
       <a href="#/clientes" data-r="clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/><path d="M16 4a4 4 0 0 1 0 8M22 21c0-3-1.8-5.6-4.5-6.6"/></svg><span>Clientes</span></a>
-      <a href="#/servicos" data-r="servicos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4Z"/></svg><span>Serviços</span></a>
-      <a href="#/config" data-r="config" class="so-desktop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg><span>Ajustes</span></a>
+      <a href="#/servicos" data-r="servicos" class="so-desktop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4Z"/></svg><span>Serviços</span></a>
+      <a href="#/config" data-r="config"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg><span>Ajustes</span></a>
     </nav>
     <div class="side-foot">
       <b id="nome-usuario"></b>
@@ -257,6 +302,7 @@ tfoot td{font-weight:700;background:#fafbfc;border-top:1px solid var(--line)}
     </div>
   </aside>
   <main>
+    <div class="topo-mobile"><img src="/logo.png" alt=""><a href="#/servicos" class="btn sm">Serviços</a></div>
     <div id="view"></div>
   </main>
 </div>
@@ -291,13 +337,28 @@ const STATUS = {
 };
 const tagStatus = (s) => `<span class="tag st-${s}">${STATUS[s] || s}</span>`;
 const hojeISO = () => S.hoje || new Date().toISOString().slice(0, 10);
+const plural = (n, um, varios) => `${n} ${n === 1 ? um : varios}`;
+const linkTel = (t) => { const d = String(t || '').replace(/\D/g, ''); return d ? `tel:${d}` : ''; };
+/* criado_em vem do banco em UTC (AAAA-MM-DD HH:MM:SS) */
+const quando = (dt) => {
+  const d = new Date(String(dt).replace(' ', 'T') + 'Z');
+  if (isNaN(d)) return '';
+  return d.toLocaleString('pt-BR', { timeZone: 'America/Cuiaba', day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(',', ' às');
+};
+const PROMESSA = { hoje: 'Prometeu pagar hoje', vencida: 'Promessa não cumprida', futura: 'Prometeu pagar', cumprida: 'Promessa cumprida' };
+function tagPromessa(a) {
+  if (!a || !a.situacao) return '';
+  const txt = a.situacao === 'futura' ? `${PROMESSA.futura} em ${diaMes(a.promessa_data)}` : a.situacao === 'vencida' ? `${PROMESSA.vencida} (${diaMes(a.promessa_data)})` : PROMESSA[a.situacao];
+  return `<span class="tag st-prom-${a.situacao}">${esc(txt)}${a.promessa_centavos ? `: ${brl(a.promessa_centavos)}` : ''}</span>`;
+}
 
 const I = {
   busca: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
   editar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
   lixo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>',
   x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
-  zap: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4a.5.5 0 0 0 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg>',
+  tel: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></svg>',
+  nota: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>',
   print: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>',
   dinheiro: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>',
   mais: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
@@ -415,13 +476,26 @@ $('#btn-sair').addEventListener('click', async () => {
 async function iniciarApp() {
   const d = await api('/me');
   S.usuario = d.usuario; S.config = d.config; S.hoje = d.hoje;
-  $('#nome-oficina').textContent = S.config.nome_oficina;
+  aplicarNomeOficina();
   $('#nome-usuario').textContent = S.usuario.nome;
   $('#papel-usuario').textContent = S.usuario.admin ? 'Administrador' : 'Equipe';
   $('#auth').hidden = true;
   $('#app').hidden = false;
   if (!location.hash || location.hash === '#/' ) location.hash = '#/painel';
   else render();
+  atualizarBadge();
+}
+
+function aplicarNomeOficina() {
+  document.title = `${S.config.nome_oficina} · Carteira de clientes`;
+  $('#logo-oficina').alt = S.config.nome_oficina;
+}
+
+/* número de clientes com conta vencida, no menu */
+async function atualizarBadge(qtd) {
+  if (qtd === undefined) { try { qtd = (await api('/carteira')).resumo.clientes_vencidos; } catch { return; } }
+  const b = $('#badge-cobrar');
+  b.textContent = qtd; b.hidden = !qtd;
 }
 
 async function boot() {
@@ -454,6 +528,7 @@ async function render() {
     else if (r === 'lancar') await vLancar(view, params);
     else if (r === 'servicos') await vServicos(view, params);
     else if (r === 'cobrancas') await vCobrancas(view, params);
+    else if (r === 'cobrar') await vCobrar(view, params);
     else if (r === 'fatura') await vFatura(view, Number(partes[1]), partes[2]);
     else if (r === 'clientes' && partes[1]) await vCliente(view, Number(partes[1]));
     else if (r === 'clientes') await vClientes(view, params);
@@ -480,7 +555,8 @@ async function vPainel(view) {
   else if (hoje <= c.fim) fase = `Período de pagamento aberto até ${dataBR(c.fim)}`;
   else fase = `Prazo de ${nomeMes(c.competencia)} encerrou em ${dataBR(c.fim)}`;
 
-  view.innerHTML = topo('Painel', `Hoje é ${dataBR(hoje)}`, `<a class="btn pri" href="#/lancar">${I.mais} Lançar serviço</a>`) + `
+  const pr = d.promessas || [];
+  view.innerHTML = topo('Painel', `Hoje é ${dataBR(hoje)}`, `<a class="btn" href="#/cobrar">A cobrar</a><a class="btn pri" href="#/lancar">${I.mais} Lançar serviço</a>`) + `
   <div class="grid g-4">
     <div class="card kpi destaque">
       <div class="rot">A receber de ${esc(nomeMesCurto(c.competencia))}</div>
@@ -513,8 +589,14 @@ async function vPainel(view) {
         : `<div class="vazio"><b>${c.total ? 'Tudo recebido' : 'Nada para cobrar'}</b>${c.total ? 'Todos os clientes desse mês já pagaram.' : 'Não houve serviços nesse mês.'}</div>`}
     </div>
     <div class="grid" style="align-content:start">
+      ${pr.length ? `<div class="card" style="border-left:4px solid var(--accent)">
+        <div class="card-h"><h3>Promessas para cobrar</h3><a class="btn sm" href="#/cobrar?f=promessas">Ver todas</a></div>
+        <ul class="lista-simples">${pr.map((c) => `
+          <li><a href="#/clientes/${c.cliente_id}" style="min-width:0"><b>${esc(c.cliente_nome)}</b><div class="sub">${c.promessa.texto ? esc(c.promessa.texto) : ''}</div><div style="margin-top:5px">${tagPromessa(c.promessa)}</div></a>
+          <b class="num">${brl(c.total)}</b></li>`).join('')}</ul>
+      </div>` : ''}
       <div class="card">
-        <div class="card-h"><h3>Vencidas</h3>${v.quantidade ? `<a class="btn sm" href="#/cobrancas?status=vencida&competencia=">Ver todas</a>` : ''}</div>
+        <div class="card-h"><h3>Vencidas</h3>${v.quantidade ? `<a class="btn sm" href="#/cobrar?f=vencidos">Ver todas</a>` : ''}</div>
         ${v.lista.length ? `<ul class="lista-simples">${v.lista.map((f) => `
           <li><a href="#/fatura/${f.cliente_id}/${f.competencia}"><b>${esc(f.cliente_nome)}</b><div class="sub">${esc(nomeMesCurto(f.competencia))} · venceu ${diaMes(f.fim)}</div></a><b class="num" style="color:var(--red)">${brl(f.saldo)}</b></li>`).join('')}</ul>`
           : '<div class="vazio"><b>Nenhuma fatura vencida</b>Tudo em dia por aqui.</div>'}
@@ -597,7 +679,7 @@ function modalCliente(cliente = {}) {
       corpo: `<form id="f-cli"><div class="erro" hidden></div>
         <div class="campo"><label>Nome do cliente ou empresa</label><input class="input" name="nome" required value="${esc(cliente.nome)}"></div>
         <div class="linha">
-          <div class="campo"><label>WhatsApp</label><input class="input" name="telefone" inputmode="tel" placeholder="(66) 99999-9999" value="${esc(cliente.telefone)}"></div>
+          <div class="campo"><label>Telefone</label><input class="input" name="telefone" inputmode="tel" placeholder="(66) 99999-9999" value="${esc(cliente.telefone)}"></div>
           <div class="campo"><label>CPF ou CNPJ</label><input class="input" name="documento" value="${esc(cliente.documento)}"></div>
         </div>
         <div class="campo"><label>Observações</label><textarea class="input" name="observacoes" rows="2">${esc(cliente.observacoes)}</textarea></div>
@@ -863,37 +945,12 @@ function modalPagamento(f, aoSalvar) {
 }
 
 /* =================================== fatura =================================== */
-function linkWhats(cliente, fatura, servicos) {
-  const tel = String(cliente.telefone || '').replace(/\D/g, '');
-  const num = tel.length >= 10 && tel.length <= 11 ? '55' + tel : tel;
-  const primeiro = String(cliente.nome).split(' ')[0];
-  const linhas = servicos.map((s) => `• ${diaMes(s.data_servico)} ${s.descricao}${s.veiculo ? ` (${s.veiculo})` : ''}: ${brl(s.valor_centavos)}`);
-  const msg = [
-    `Olá, ${primeiro}! Tudo bem?`,
-    ``,
-    `Segue o resumo dos serviços feitos na ${S.config.nome_oficina} em ${nomeMes(fatura.competencia)}:`,
-    ``,
-    ...linhas,
-    ``,
-    `*Total: ${brl(fatura.total)}*`,
-    ...(fatura.pago > 0 ? [`Já pago: ${brl(fatura.pago)}`, `*Valor em aberto: ${brl(fatura.saldo)}*`] : []),
-    ``,
-    fatura.status === 'vencida'
-      ? `O prazo de pagamento era até ${dataBR(fatura.fim)}.`
-      : `Pagamento entre ${dataBR(fatura.inicio)} e ${dataBR(fatura.fim)}.`,
-    ...(S.config.chave_pix ? [`Chave Pix: ${S.config.chave_pix}`] : []),
-    ``,
-    `Qualquer dúvida, é só chamar. Obrigado pela confiança!`,
-  ].join('\n');
-  return (num ? `https://wa.me/${num}` : 'https://wa.me/') + '?text=' + encodeURIComponent(msg);
-}
-
 async function vFatura(view, clienteId, comp) {
   const d = await api(`/faturas/${clienteId}/${comp}`);
   const { cliente, fatura: f, servicos, pagamentos } = d;
   view.innerHTML = `<a href="#/cobrancas?competencia=${comp}" class="btn sm nao-imprime" style="margin-bottom:12px">${I.voltar} Cobranças</a>` +
     topo(`${esc(cliente.nome)}`, `Serviços de ${esc(nomeMes(comp))} · pagamento entre ${dataBR(f.inicio)} e ${dataBR(f.fim)}`,
-      `${f.saldo > 0 && servicos.length ? `<a class="btn zap" target="_blank" rel="noopener" href="${esc(linkWhats(cliente, f, servicos))}">${I.zap} Cobrar no WhatsApp</a>` : ''}
+      `${linkTel(cliente.telefone) ? `<a class="btn" href="${linkTel(cliente.telefone)}">${I.tel} Ligar</a>` : ''}
        <button class="btn" onclick="window.print()">${I.print} Imprimir</button>
        ${f.saldo > 0 ? `<button class="btn pri" id="b-rec">${I.dinheiro} Receber</button>` : ''}`) + `
   <div class="print-only" style="margin-bottom:12px"><b>${esc(S.config.nome_oficina)}</b>${S.config.chave_pix ? ` · Chave Pix: ${esc(S.config.chave_pix)}` : ''}</div>
@@ -945,7 +1002,7 @@ async function vClientes(view, params) {
       <label class="small muted" style="margin-left:auto;display:flex;gap:6px;align-items:center"><input type="checkbox" id="f-in" ${inativos ? 'checked' : ''}> Mostrar inativos</label>
     </div>
     <div class="tabela-wrap"><table>
-      <thead><tr><th>Cliente</th><th class="esconde-mobile">WhatsApp</th><th class="esconde-mobile">Último serviço</th><th class="dir">Em aberto</th></tr></thead>
+      <thead><tr><th>Cliente</th><th class="esconde-mobile">Telefone</th><th class="esconde-mobile">Último serviço</th><th class="dir">Em aberto</th></tr></thead>
       <tbody id="tb-cli"></tbody></table>
       <div class="vazio" id="cli-vazio" hidden><b>Nenhum cliente encontrado</b>Cadastre pelo botão "Novo cliente" ou direto ao lançar um serviço.</div>
     </div>
@@ -968,40 +1025,217 @@ async function vClientes(view, params) {
 }
 
 async function vCliente(view, id) {
-  const { cliente, faturas, saldo_total } = await api(`/clientes/${id}`);
-  const tel = String(cliente.telefone || '').replace(/\D/g, '');
+  const { cliente, faturas, saldo_total, anotacoes } = await api(`/clientes/${id}`);
+  const abertas = faturas.filter((f) => f.saldo > 0).sort((a, b) => a.competencia.localeCompare(b.competencia));
+  const vencido = abertas.filter((f) => f.status === 'vencida').reduce((a, f) => a + f.saldo, 0);
+  const tel = linkTel(cliente.telefone);
   view.innerHTML = `<a href="#/clientes" class="btn sm" style="margin-bottom:12px">${I.voltar} Clientes</a>` +
     topo(esc(cliente.nome) + (cliente.ativo ? '' : ' <span class="tag st-em_aberto">Inativo</span>'),
       [cliente.telefone, cliente.documento].filter(Boolean).map(esc).join(' · ') || 'Sem contato cadastrado',
-      `${tel ? `<a class="btn zap" target="_blank" rel="noopener" href="https://wa.me/${tel.length <= 11 ? '55' + tel : tel}">${I.zap} WhatsApp</a>` : ''}
+      `${tel ? `<a class="btn" href="${tel}">${I.tel} Ligar</a>` : ''}
        <button class="btn" id="b-ed">${I.editar} Editar</button>
-       <a class="btn pri" href="#/lancar?cliente=${cliente.id}">${I.mais} Lançar serviço</a>`) + `
+       <button class="btn" id="b-nota">${I.nota} Anotar cobrança</button>
+       <a class="btn" href="#/lancar?cliente=${cliente.id}">${I.mais} Lançar serviço</a>
+       ${saldo_total > 0 ? `<button class="btn pri" id="b-rec">${I.dinheiro} Receber</button>` : ''}`) + `
   <div class="grid g-3">
-    <div class="card kpi"><div class="rot">Em aberto</div><div class="val num">${brl(saldo_total)}</div><div class="det">Soma de tudo que ainda não foi pago</div></div>
-    <div class="card kpi"><div class="rot">Total em serviços</div><div class="val num">${brl(faturas.reduce((a, f) => a + f.total, 0))}</div><div class="det">${faturas.reduce((a, f) => a + f.qtd, 0)} serviços no histórico</div></div>
-    <div class="card kpi"><div class="rot">Observações</div><div class="det" style="margin-top:8px;color:var(--ink-2)">${esc(cliente.observacoes || 'Nenhuma')}</div></div>
+    <div class="card kpi ${saldo_total > 0 ? 'destaque' : ''}"><div class="rot">Deve no total</div><div class="val num">${brl(saldo_total)}</div><div class="det">${abertas.length ? plural(abertas.length, 'mês em aberto', 'meses em aberto') : 'Nada em aberto'}</div></div>
+    <div class="card kpi ${vencido ? 'alerta' : ''}"><div class="rot">Já vencido</div><div class="val num">${brl(vencido)}</div><div class="det">${vencido ? 'Passou do prazo de pagamento' : 'Nada vencido'}</div></div>
+    <div class="card kpi"><div class="rot">Total em serviços</div><div class="val num">${brl(faturas.reduce((a, f) => a + f.total, 0))}</div><div class="det">${plural(faturas.reduce((a, f) => a + f.qtd, 0), 'serviço', 'serviços')} no histórico</div></div>
   </div>
+  ${cliente.observacoes ? `<div class="sep"></div><div class="dica">${I.info}<span>${esc(cliente.observacoes)}</span></div>` : ''}
   <div class="sep"></div>
-  <div class="card">
-    <div class="card-h"><h3>Cobranças por mês</h3></div>
-    <div class="tabela-wrap">${faturas.length ? `<table>
-      <thead><tr><th>Mês dos serviços</th><th class="esconde-mobile">Vencimento</th><th class="dir">Total</th><th class="dir esconde-mobile">Pago</th><th class="dir">Falta</th><th>Situação</th></tr></thead>
-      <tbody>${faturas.map((f) => `<tr class="clicavel" data-ir="#/fatura/${cliente.id}/${f.competencia}">
-        <td><b>${esc(nomeMesCurto(f.competencia))}</b> <span class="muted small">${f.qtd} ${f.qtd === 1 ? 'serviço' : 'serviços'}</span></td>
-        <td class="esconde-mobile">${diaMes(f.inicio)} a ${diaMes(f.fim)}</td>
-        <td class="dir num">${brl(f.total)}</td><td class="dir num esconde-mobile">${brl(f.pago)}</td>
-        <td class="dir num"><b>${brl(Math.max(f.saldo, 0))}</b></td><td>${tagStatus(f.status)}</td></tr>`).join('')}</tbody></table>`
-      : `<div class="vazio"><b>Nenhum serviço para este cliente</b><a href="#/lancar?cliente=${cliente.id}">Lançar o primeiro</a>${''}</div>`}</div>
+  <div class="grid" style="align-items:start">
+    <div class="card">
+      <div class="card-h"><h3>Cobranças por mês</h3></div>
+      <div class="tabela-wrap">${faturas.length ? `<table>
+        <thead><tr><th>Mês dos serviços</th><th class="esconde-mobile">Vencimento</th><th class="dir">Total</th><th class="dir esconde-mobile">Pago</th><th class="dir">Falta</th><th>Situação</th></tr></thead>
+        <tbody>${faturas.map((f) => `<tr class="clicavel" data-ir="#/fatura/${cliente.id}/${f.competencia}">
+          <td><b>${esc(nomeMesCurto(f.competencia))}</b> <span class="muted small">${plural(f.qtd, 'serviço', 'serviços')}</span></td>
+          <td class="esconde-mobile">${diaMes(f.inicio)} a ${diaMes(f.fim)}</td>
+          <td class="dir num">${brl(f.total)}</td><td class="dir num esconde-mobile">${brl(f.pago)}</td>
+          <td class="dir num"><b>${brl(Math.max(f.saldo, 0))}</b></td><td>${tagStatus(f.status)}</td></tr>`).join('')}</tbody></table>`
+        : `<div class="vazio"><b>Nenhum serviço para este cliente</b><a href="#/lancar?cliente=${cliente.id}">Lançar o primeiro</a></div>`}</div>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>Anotações de cobrança</h3><button class="btn sm" id="b-nota2">${I.mais} Anotar</button></div>
+      ${anotacoes.length ? `<ul class="timeline">${anotacoes.map((a) => `<li><div style="min-width:0">
+          <div class="small muted">${esc(quando(a.criado_em))}${a.autor ? ` · ${esc(a.autor)}` : ''}</div>
+          ${a.texto ? `<div class="nota-txt" style="white-space:pre-wrap;word-break:break-word;margin:3px 0">${esc(a.texto)}</div>` : ''}
+          ${tagPromessa(a)}</div>
+          <button class="icon-btn" data-delnota="${a.id}" title="Apagar anotação">${I.lixo}</button></li>`).join('')}</ul>`
+        : '<div class="vazio"><b>Nenhuma anotação</b>Registre aqui cada conversa de cobrança e o dia que o cliente prometeu pagar.</div>'}
+    </div>
   </div>
-  ${faturas.length ? '' : `<div class="sep"></div><button class="btn perigo" id="b-del">${I.lixo} Excluir cliente</button>`}`;
+  ${faturas.length || anotacoes.length ? '' : `<div class="sep"></div><button class="btn perigo" id="b-del">${I.lixo} Excluir cliente</button>`}`;
   $$('[data-ir]').forEach((tr) => tr.onclick = () => (location.hash = tr.dataset.ir));
   $('#b-ed').onclick = async () => { if (await modalCliente(cliente)) render(); };
+  const anotar = () => modalAnotacao({ cliente_id: cliente.id, cliente_nome: cliente.nome, saldo: saldo_total }, render);
+  $('#b-nota').onclick = anotar; $('#b-nota2').onclick = anotar;
+  const rec = $('#b-rec');
+  if (rec) rec.onclick = () => modalReceberDivida({ cliente_id: cliente.id, cliente_nome: cliente.nome, meses: abertas }, render);
+  $$('[data-delnota]').forEach((b) => b.onclick = async () => {
+    if (!(await confirmar('Apagar anotação', 'Apagar esta anotação de cobrança?', 'Apagar'))) return;
+    try { await api(`/anotacoes/${b.dataset.delnota}`, { method: 'DELETE' }); toast('Anotação apagada.'); render(); } catch (ex) { toast(ex.message, true); }
+  });
   const del = $('#b-del');
   if (del) del.onclick = async () => {
     if (!(await confirmar('Excluir cliente', `Excluir ${esc(cliente.nome)} da carteira?`, 'Excluir'))) return;
     try { await api(`/clientes/${cliente.id}`, { method: 'DELETE' }); await carregarClientes(true); toast('Cliente excluído.'); location.hash = '#/clientes'; }
     catch (ex) { toast(ex.message, true); }
   };
+}
+
+/* ================================== a cobrar ================================== */
+async function vCobrar(view, params) {
+  const { clientes, resumo } = await api('/carteira');
+  atualizarBadge(resumo.clientes_vencidos);
+  const filtro = params.get('f') || 'agora';
+  const promAtiva = (c) => c.promessa && ['hoje', 'vencida', 'futura'].includes(c.promessa.situacao);
+  const filtros = {
+    agora: (c) => c.vencido + c.no_prazo > 0 || (c.promessa && ['hoje', 'vencida'].includes(c.promessa.situacao)),
+    vencidos: (c) => c.vencido > 0,
+    promessas: promAtiva,
+    todos: () => true,
+  };
+  const chips = [['agora', 'Cobrar agora'], ['vencidos', 'Vencidos'], ['promessas', 'Com promessa'], ['todos', 'Todos que devem']];
+  const prom = resumo.promessas_hoje + resumo.promessas_vencidas;
+
+  view.innerHTML = topo('A cobrar', 'Quem está devendo, somando todos os meses. Os mais atrasados aparecem primeiro.') + `
+  <div class="grid g-4">
+    <div class="card kpi destaque"><div class="rot">Total a receber</div><div class="val num">${brl(resumo.total)}</div><div class="det">${plural(resumo.clientes, 'cliente devendo', 'clientes devendo')}</div></div>
+    <div class="card kpi ${resumo.vencido ? 'alerta' : ''}"><div class="rot">Vencido</div><div class="val num">${brl(resumo.vencido)}</div><div class="det">${plural(resumo.clientes_vencidos, 'cliente atrasado', 'clientes atrasados')}</div></div>
+    <div class="card kpi"><div class="rot">Vence agora</div><div class="val num">${brl(resumo.no_prazo)}</div><div class="det">Dentro do prazo de pagamento</div></div>
+    <div class="card kpi"><div class="rot">Promessas para cobrar</div><div class="val num">${prom}</div><div class="det">${resumo.promessas_hoje} para hoje · ${resumo.promessas_vencidas} não cumpridas</div></div>
+  </div>
+  <div class="sep"></div>
+  <div class="card">
+    <div class="filtros">
+      <div class="busca">${I.busca}<input class="input" id="f-q" placeholder="Buscar cliente"></div>
+      <div class="chips" style="margin-left:auto">${chips.map(([v, l]) => `<button class="chip ${filtro === v ? 'ativo' : ''}" data-f="${v}">${l}</button>`).join('')}</div>
+    </div>
+    <div id="lista-dev"></div>
+  </div>
+  ${resumo.vencido + resumo.no_prazo < resumo.total ? `<p class="muted small" style="margin:12px 2px 0">Ainda vai vencer: ${brl(resumo.total - resumo.vencido - resumo.no_prazo)} (meses que ainda não chegaram no prazo de pagamento).</p>` : ''}`;
+
+  const desenhar = () => {
+    const q = normal($('#f-q').value.trim());
+    const lista = clientes.filter(filtros[filtro] || filtros.agora).filter((c) => !q || normal(c.cliente_nome).includes(q) || normal(c.cliente_telefone).includes(q));
+    $('#lista-dev').innerHTML = lista.length ? lista.map((c) => {
+      const tel = linkTel(c.cliente_telefone);
+      const situacao = c.vencido ? `<span class="tag st-vencida">${c.atraso_dias ? plural(c.atraso_dias, 'dia de atraso', 'dias de atraso') : 'Vencida'}</span>`
+        : c.no_prazo ? '<span class="tag st-no_prazo">Vence agora</span>' : '<span class="tag st-a_vencer">Ainda não venceu</span>';
+      const a = c.ultima;
+      return `<div class="dev ${c.vencido ? 'atrasado' : ''}">
+        <div class="dev-topo">
+          <div style="min-width:0"><a class="dev-nome" href="#/clientes/${c.cliente_id}">${esc(c.cliente_nome)}</a>
+            <div class="dev-sub">${tel ? `<a href="${tel}">${I.tel.replace('<svg', '<svg style="width:13px;height:13px;vertical-align:-2px"')} ${esc(c.cliente_telefone)}</a>` : '<span>Sem telefone</span>'}<span>·</span><span>${plural(c.meses.length, 'mês em aberto', 'meses em aberto')}</span></div></div>
+          <div class="dev-valor"><b class="num">${brl(c.total)}</b>${situacao}</div>
+        </div>
+        <div class="meses">${c.meses.map((m) => `<a class="mes ${m.status}" href="#/fatura/${c.cliente_id}/${m.competencia}" title="${esc(STATUS[m.status])}">${esc(nomeMesCurto(m.competencia))} <b class="num">${brl(m.saldo)}</b></a>`).join('')}</div>
+        ${a ? `<div class="nota"><div style="min-width:0"><div class="quem">${esc(quando(a.criado_em))}${a.autor ? ` · ${esc(a.autor)}` : ''}</div>${a.texto ? `<div class="txt">${esc(a.texto)}</div>` : ''}</div><div>${tagPromessa(c.promessa && c.promessa.id === a.id ? c.promessa : null)}</div></div>` : ''}
+        ${c.promessa && (!a || c.promessa.id !== a.id) && c.promessa.situacao !== 'cumprida' ? `<div>${tagPromessa(c.promessa)}</div>` : ''}
+        <div class="dev-acoes">
+          <button class="btn pri sm" data-rec="${c.cliente_id}">${I.dinheiro} Receber</button>
+          <button class="btn sm" data-nota="${c.cliente_id}">${I.nota} Anotar cobrança</button>
+          ${tel ? `<a class="btn sm" href="${tel}">${I.tel} Ligar</a>` : ''}
+        </div>
+      </div>`;
+    }).join('') : `<div class="vazio"><b>${clientes.length ? 'Ninguém nesse filtro' : 'Ninguém devendo'}</b>${clientes.length ? 'Troque o filtro para ver os outros clientes.' : 'Todas as contas estão pagas.'}</div>`;
+    const achar = (id) => clientes.find((c) => c.cliente_id === Number(id));
+    $$('[data-rec]').forEach((b) => b.onclick = () => modalReceberDivida(achar(b.dataset.rec), render));
+    $$('[data-nota]').forEach((b) => b.onclick = () => { const c = achar(b.dataset.nota); modalAnotacao({ cliente_id: c.cliente_id, cliente_nome: c.cliente_nome, saldo: c.total }, render); });
+  };
+  $('#f-q').addEventListener('input', desenhar);
+  $$('[data-f]').forEach((b) => b.onclick = () => (location.hash = '#/cobrar?f=' + b.dataset.f));
+  desenhar();
+}
+
+/* recebe um valor e abate dos meses mais antigos primeiro */
+function modalReceberDivida(c, aoSalvar) {
+  const meses = (c.meses || []).filter((m) => m.saldo > 0).sort((a, b) => a.competencia.localeCompare(b.competencia));
+  const divida = meses.reduce((a, m) => a + m.saldo, 0);
+  const formas = ['Dinheiro', 'Pix', 'Cartão de débito', 'Cartão de crédito', 'Transferência', 'Boleto', 'Outro'];
+  const m = abrirModal({
+    titulo: 'Receber do cliente', largura: 520,
+    corpo: `<form id="f-recd"><div class="erro" hidden></div>
+      <p style="margin:0 0 12px"><b>${esc(c.cliente_nome)}</b> deve <b class="num">${brl(divida)}</b>${meses.length > 1 ? ` em ${meses.length} meses` : ''}.<br>
+      <span class="muted small">Pode receber só uma parte. O valor abate primeiro os meses mais antigos e o resto fica para depois.</span></p>
+      <div class="campo"><label>Quanto o cliente pagou agora</label><input class="input grande num" name="valor"></div>
+      <ul class="divisao" data-div></ul>
+      <div class="linha">
+        <div class="campo"><label>Data</label><input class="input" type="date" name="data" value="${hojeISO()}"></div>
+        <div class="campo"><label>Forma</label><select class="input" name="forma">${formas.map((x) => `<option>${x}</option>`).join('')}</select></div>
+      </div>
+      <div class="campo"><label>Observação (opcional)</label><input class="input" name="obs" placeholder="Ex: pagou no balcão"></div>
+      <button hidden></button></form>`,
+    rodape: `<button class="btn" data-fechar>Cancelar</button><button class="btn pri" data-salvar>${I.dinheiro} Confirmar recebimento</button>`,
+  });
+  const fm = $('#f-recd', m);
+  const valor = $('[name=valor]', fm);
+  mascaraDinheiro(valor, divida);
+  setTimeout(() => valor.select(), 40);
+  const previa = () => {
+    let resta = centavosDe(valor);
+    const linhas = meses.map((x) => {
+      const parte = Math.min(resta, x.saldo); resta -= parte;
+      const cls = parte === x.saldo ? 'quita' : parte > 0 ? 'parcial' : '';
+      const txt = parte === x.saldo ? 'quita' : parte > 0 ? `abate ${brl(parte)}, fica ${brl(x.saldo - parte)}` : `fica ${brl(x.saldo)}`;
+      return `<li class="${cls}"><span>${esc(nomeMesCurto(x.competencia))} <span class="muted">(${brl(x.saldo)})</span></span><b class="num">${txt}</b></li>`;
+    });
+    const v = centavosDe(valor);
+    const falta = Math.max(divida - v, 0);
+    linhas.push(v > divida
+      ? `<li style="color:var(--red)"><span>Valor maior que a dívida</span><b class="num">${brl(divida)}</b></li>`
+      : `<li><span><b>Depois disso fica faltando</b></span><b class="num">${brl(falta)}</b></li>`);
+    $('[data-div]', fm).innerHTML = linhas.join('');
+  };
+  valor.addEventListener('input', previa); previa();
+  const salvar = async (e) => {
+    e && e.preventDefault();
+    const er = $('.erro', fm); er.hidden = true;
+    const btn = $('[data-salvar]', m); btn.disabled = true;
+    try {
+      const r = await api(`/clientes/${c.cliente_id}/receber`, { method: 'POST', body: {
+        valor_centavos: centavosDe(valor), data_pagamento: $('[name=data]', fm).value, forma: $('[name=forma]', fm).value, observacao: $('[name=obs]', fm).value,
+      } });
+      fecharModal();
+      toast(r.restante ? `Recebido ${brl(centavosDe(valor))}. Ainda falta ${brl(r.restante)}.` : `Recebido ${brl(centavosDe(valor))}. Conta quitada.`);
+      atualizarBadge(); aoSalvar && aoSalvar();
+    } catch (ex) { er.textContent = ex.message; er.hidden = false; btn.disabled = false; }
+  };
+  fm.addEventListener('submit', salvar);
+  $('[data-salvar]', m).onclick = salvar;
+}
+
+/* anotação de cobrança, com promessa de pagamento opcional */
+function modalAnotacao(c, aoSalvar) {
+  const m = abrirModal({
+    titulo: 'Anotar cobrança', largura: 500,
+    corpo: `<form id="f-nota"><div class="erro" hidden></div>
+      <p style="margin:0 0 12px"><b>${esc(c.cliente_nome)}</b>${c.saldo ? ` <span class="muted">deve ${brl(c.saldo)}</span>` : ''}</p>
+      <div class="campo"><label>O que foi conversado</label><textarea class="input" name="texto" rows="3" placeholder="Ex: Passei na loja, ele pediu para voltar na sexta"></textarea></div>
+      <div class="linha">
+        <div class="campo"><label>Prometeu pagar no dia (opcional)</label><input class="input" type="date" name="promessa_data"></div>
+        <div class="campo"><label>Valor prometido (opcional)</label><input class="input num" name="promessa_valor" placeholder="R$ 0,00"></div>
+      </div>
+      <button hidden></button></form>`,
+    rodape: `<button class="btn" data-fechar>Cancelar</button><button class="btn pri" data-salvar>Salvar anotação</button>`,
+  });
+  const fm = $('#f-nota', m);
+  const pv = $('[name=promessa_valor]', fm);
+  mascaraDinheiro(pv, 0);
+  const salvar = async (e) => {
+    e && e.preventDefault();
+    const er = $('.erro', fm); er.hidden = true;
+    try {
+      await api(`/clientes/${c.cliente_id}/anotacoes`, { method: 'POST', body: {
+        texto: fm.texto.value, promessa_data: fm.promessa_data.value || null, promessa_centavos: centavosDe(pv) || null,
+      } });
+      fecharModal(); toast('Anotação salva.'); aoSalvar && aoSalvar();
+    } catch (ex) { er.textContent = ex.message; er.hidden = false; }
+  };
+  fm.addEventListener('submit', salvar);
+  $('[data-salvar]', m).onclick = salvar;
 }
 
 /* ================================== ajustes ================================== */
@@ -1015,7 +1249,7 @@ async function vConfig(view) {
       <div class="card-h"><h3>Oficina e vencimento</h3></div>
       <div class="card-b"><div class="erro" hidden></div>
         <div class="campo"><label>Nome da oficina</label><input class="input" name="nome_oficina" value="${esc(cfg.nome_oficina)}" ${admin ? '' : 'disabled'}></div>
-        <div class="campo"><label>Chave Pix (vai na mensagem de cobrança)</label><input class="input" name="chave_pix" value="${esc(cfg.chave_pix)}" placeholder="CNPJ, celular, e-mail ou chave aleatória" ${admin ? '' : 'disabled'}></div>
+        <div class="campo"><label>Chave Pix (aparece na fatura impressa)</label><input class="input" name="chave_pix" value="${esc(cfg.chave_pix)}" placeholder="CNPJ, celular, e-mail ou chave aleatória" ${admin ? '' : 'disabled'}></div>
         <div class="linha">
           <div class="campo"><label>Pagamento a partir do dia</label><input class="input" type="number" min="1" max="31" name="dia_inicio" value="${cfg.dia_inicio}" ${admin ? '' : 'disabled'}></div>
           <div class="campo"><label>Até o dia</label><input class="input" type="number" min="1" max="31" name="dia_fim" value="${cfg.dia_fim}" ${admin ? '' : 'disabled'}></div>
@@ -1043,7 +1277,7 @@ async function vConfig(view) {
       const body = Object.fromEntries(new FormData(e.target));
       body.dia_inicio = Number(body.dia_inicio); body.dia_fim = Number(body.dia_fim);
       const er = $('.erro', e.target); er.hidden = true;
-      try { S.config = await api('/config', { method: 'PUT', body }); $('#nome-oficina').textContent = S.config.nome_oficina; toast('Ajustes salvos.'); }
+      try { S.config = await api('/config', { method: 'PUT', body }); aplicarNomeOficina(); toast('Ajustes salvos.'); }
       catch (ex) { er.textContent = ex.message; er.hidden = false; }
     });
     const desenharUsuarios = (usuarios) => {

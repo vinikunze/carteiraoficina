@@ -20,7 +20,7 @@ O terminal mostra o endereço, algo como `https://carteira-oficina.SEU-USUARIO.w
 
 **Abra o endereço logo em seguida.** O primeiro acesso pede para criar o usuário administrador. Quem abrir primeiro vira o administrador, por isso faça isso assim que publicar.
 
-Depois, em **Ajustes**, confira a chave Pix (vai na mensagem de cobrança) e cadastre o resto da equipe.
+Depois, em **Ajustes**, confira a chave Pix (aparece na fatura impressa) e cadastre o resto da equipe.
 
 ## Domínio próprio (opcional)
 
@@ -30,7 +30,10 @@ No painel da Cloudflare: Workers e Pages > carteira-oficina > Settings > Domains
 
 - **Lançar serviço:** escolhe o cliente (ou cadastra na hora), data, veículo, o que foi feito e valor. O sistema já mostra em qual cobrança o serviço entra.
 - **Cobranças:** lista por mês de todos os clientes, com total, pago, falta e situação. Dá para receber pagamento (total ou parcial) e exportar planilha.
-- **Fatura do cliente:** detalhe do mês, botão para cobrar no WhatsApp com a mensagem pronta (lista dos serviços, total, prazo e Pix) e botão de imprimir.
+- **A cobrar:** lista de quem está devendo, somando todos os meses, com os mais atrasados primeiro. Mostra há quantos dias está vencido, a última anotação de cobrança e as promessas de pagamento.
+- **Receber:** o cliente paga quanto puder. O valor abate primeiro os meses mais antigos e o resto fica em aberto para depois.
+- **Anotar cobrança:** registra o que foi conversado e, se quiser, o dia e o valor que o cliente prometeu pagar. O painel avisa as promessas de hoje e as não cumpridas.
+- **Fatura do cliente:** detalhe do mês, botão para ligar e botão de imprimir.
 - **Situações:** Mês corrente (ainda acumulando), A vencer, Vence agora (dentro do dia 5 a 10), Vencida, Paga.
 - **Acesso:** login com usuário e senha. Administrador mexe em Ajustes e na equipe; o restante da equipe lança serviços e recebe pagamentos.
 
@@ -57,5 +60,6 @@ A Cloudflare também guarda o histórico do banco por 30 dias (Time Travel), dá
 src/index.js                  API e regras (login, clientes, serviços, faturas, pagamentos)
 public/index.html             Telas do sistema
 migrations/0001_inicial.sql   Estrutura do banco
+migrations/0002_anotacoes.sql Anotações de cobrança
 wrangler.toml                 Configuração da Cloudflare (já com o ID do banco)
 ```

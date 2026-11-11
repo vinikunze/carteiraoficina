@@ -9,6 +9,8 @@ Sistema web para uma oficina mecânica controlar o que cada cliente deve. A equi
 - Exemplo: serviços de 01/11 a 30/11 são pagos entre 05/12 e 10/12.
 - A competência é calculada a partir da data do serviço (`data_servico.slice(0, 7)`), nunca digitada.
 - Pagamentos são registrados por cliente + competência e podem ser parciais.
+- "Receber" na tela A cobrar e no cliente (`POST /api/clientes/:id/receber`) aceita qualquer valor até a dívida total e abate dos meses mais antigos primeiro, gravando um pagamento por competência.
+- A cobrança é feita pessoalmente, não por WhatsApp. Anotações de cobrança (tabela `anotacoes`) guardam o que foi conversado e, opcionalmente, o dia e o valor que o cliente prometeu pagar. A promessa conta como cumprida quando, depois da anotação, o cliente paga o valor prometido (ou qualquer valor, se não houver). Situações: `hoje`, `vencida`, `futura`, `cumprida`.
 - Situações da fatura (calculadas em `statusFatura` no backend, não ficam salvas):
   - `em_aberto`: mês corrente, ainda acumulando serviços
   - `a_vencer`: mês fechado, antes do dia de início
@@ -22,7 +24,7 @@ Sistema web para uma oficina mecânica controlar o que cada cliente deve. A equi
 - Cloudflare Worker (`src/index.js`) servindo a API em `/api/*`
 - Banco Cloudflare D1, binding `DB`, banco `carteira-oficina` (o ID já está no `wrangler.toml`)
 - Frontend em um único arquivo `public/index.html` (HTML, CSS e JS puros, sem framework e sem build), servido como static assets pelo binding `ASSETS`
-- Rotas do frontend por hash: `#/painel`, `#/lancar`, `#/servicos`, `#/cobrancas`, `#/fatura/:clienteId/:competencia`, `#/clientes`, `#/clientes/:id`, `#/config`
+- Rotas do frontend por hash: `#/painel`, `#/lancar`, `#/servicos`, `#/cobrar`, `#/cobrancas`, `#/fatura/:clienteId/:competencia`, `#/clientes`, `#/clientes/:id`, `#/config`
 - Sem dependências em runtime. Só o `wrangler` como devDependency.
 
 ## Estrutura
@@ -31,13 +33,15 @@ Sistema web para uma oficina mecânica controlar o que cada cliente deve. A equi
 src/index.js                  API: auth, clientes, serviços, faturas, pagamentos, usuários, config
 public/index.html             Todas as telas
 migrations/0001_inicial.sql   Schema do banco
+migrations/0002_anotacoes.sql Anotações de cobrança e promessas de pagamento
+public/logo.png, icone.png    Logo da oficina (fundo transparente) e ícone da aba
 wrangler.toml                 Config do Worker e do D1
 LEIA-ME.md                    Guia para o usuário final
 ```
 
 ## Banco (D1)
 
-Tabelas: `usuarios`, `sessoes`, `tentativas_login`, `config`, `clientes`, `servicos`, `pagamentos`.
+Tabelas: `usuarios`, `sessoes`, `tentativas_login`, `config`, `clientes`, `servicos`, `pagamentos`, `anotacoes`.
 
 - Valores em dinheiro sempre em **centavos inteiros** (`valor_centavos`). Nunca usar float para dinheiro.
 - Datas em texto `AAAA-MM-DD`, competência em `AAAA-MM`.
@@ -68,12 +72,13 @@ npm run backup    # exporta o banco de produção para backup.sql
 ## Convenções
 
 - Todo texto da interface e mensagens de erro em português do Brasil.
-- **Não usar travessão (—) em nenhum texto visível** (interface, mensagens, mensagem de WhatsApp). Usar vírgula, ponto ou dois pontos.
+- **Não usar travessão (—) em nenhum texto visível** (interface, mensagens, textos impressos). Usar vírgula, ponto ou dois pontos.
 - Manter o frontend em arquivo único, sem framework e sem etapa de build.
 - Sempre escapar dados do usuário com `esc()` antes de colocar em HTML.
 - Erros da API: lançar com `falha(status, 'mensagem amigável')`. A mensagem aparece direto para o usuário.
 - Formatação de dinheiro no front com `brl(centavos)`. Campos de valor usam `mascaraDinheiro()`.
-- A mensagem de cobrança do WhatsApp é montada em `linkWhats()` no front e usa o nome da oficina e a chave Pix da tabela `config`.
+- Visual: preto (`--side`) e amarelo da logo (`--accent: #f8d200`). Amarelo só como fundo com texto preto, nunca texto amarelo em fundo branco.
+- A chave Pix da tabela `config` só aparece na fatura impressa.
 
 ## Testar antes de entregar
 
